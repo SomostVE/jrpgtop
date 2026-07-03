@@ -10,6 +10,7 @@ import {
   getRankedItemsForCurrentScope
 } from "./render-grid.js";
 
+
 const exportStage = document.getElementById("export-stage");
 const previewModal = document.getElementById("preview-modal");
 const previewViewport = document.getElementById("preview-viewport");
