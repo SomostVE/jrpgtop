@@ -159,10 +159,6 @@
     left: 10px;
   }
 
-  .side-menu-right {
-    right: 10px;
-  }
-
   .side-menu .side-panel {
     position: fixed;
     top: 50px;
@@ -173,17 +169,44 @@
     overflow: auto;
   }
 
-  .licence-panel {
-    width: auto;
-  }
-
-  .licence-entry {
+  .licence-handle {
+    top: 10px;
+    right: 10px;
     transform: none;
   }
 
+  .licence-drawer {
+    width: 100vw;
+    border-left: 0;
+  }
+
+  .licence-drawer-header {
+    min-height: 84px;
+    padding: 20px 18px 16px;
+  }
+
+  .licence-drawer-header h2 {
+    font-size: 22px;
+  }
+
+  .licence-list {
+    height: calc(100vh - 84px);
+    justify-content: flex-start;
+    padding: 24px 18px 40px;
+  }
+
+  .licence-entry,
   .licence-entry:hover,
   .licence-entry.active {
     transform: none;
+  }
+
+  .licence-entry {
+    min-height: 78px;
+  }
+
+  .licence-entry-name {
+    font-size: 21px;
   }
 
   .modal {

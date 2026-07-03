@@ -131,37 +131,6 @@
   text-transform: uppercase;
 }
 
-.empty-state {
-  display: none;
-  width: min(560px, 100%);
-  margin: 15vh auto 0;
-  padding: 26px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 20px;
-  background: rgba(6, 10, 28, 0.82);
-  text-align: center;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.42);
-}
-
-.empty-state strong,
-.empty-state span {
-  display: block;
-}
-
-.empty-state span {
-  margin-top: 8px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.app.selection-empty .empty-state {
-  display: block;
-}
-
-.app.selection-empty .grid-wrapper {
-  display: none;
-}
-
 .app.unranked-empty #divider,
 .app.unranked-empty #unranked-label,
 .app.unranked-empty #unranked-section,
@@ -176,11 +145,9 @@
   min-height: calc(100vh - 130px);
 }
 
-.export-stage {
-  position: fixed;
-  left: -10000px;
-  top: 0;
-  z-index: -10;
+/* Scène finale toujours calculée en 1920 × 1080. Elle reste hors écran mais rendue. */
+.export-stage,
+.preview-stage {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
@@ -194,6 +161,22 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+}
+
+.export-stage {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  z-index: -100;
+  pointer-events: none;
+}
+
+.preview-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  pointer-events: none;
 }
 
 .export-background,
@@ -268,12 +251,18 @@
   width: 100%;
 }
 
-.export-empty {
-  display: grid;
-  place-items: center;
-  flex: 1;
-  font-size: 34px;
-  font-weight: 800;
+.preview-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.48);
+}
+
+.preview-mount {
+  position: absolute;
+  inset: 0;
 }
 
 @media (max-width: 1500px) {
