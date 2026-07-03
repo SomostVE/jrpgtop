@@ -10,10 +10,12 @@ import { t } from "./i18n.js";
 
 const listRoot = document.getElementById("licence-list");
 const rightMenu = document.getElementById("right-menu");
+const licenceDrawer = document.getElementById("licence-drawer");
 const searchInput = document.getElementById("licence-search");
 const clearSearchButton = document.getElementById("licence-search-clear");
 
 let searchQuery = "";
+let drawerWasOpen = false;
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -40,6 +42,59 @@ function syncSearchControls() {
   if (clearSearchButton) {
     clearSearchButton.hidden = searchQuery.length === 0;
   }
+}
+
+function scrollEntryToCenter(entry, behavior = "auto") {
+  if (!entry || listRoot.clientHeight <= 0) {
+    return;
+  }
+
+  const targetTop =
+    entry.offsetTop -
+    (listRoot.clientHeight - entry.offsetHeight) / 2;
+
+  listRoot.scrollTo({
+    top: Math.max(0, targetTop),
+    behavior
+  });
+}
+
+function centerCurrentEntry(behavior = "auto") {
+  window.requestAnimationFrame(() => {
+    const activeEntry =
+      listRoot.querySelector(".licence-entry.active");
+
+    if (activeEntry) {
+      scrollEntryToCenter(activeEntry, behavior);
+      return;
+    }
+
+    const firstResult =
+      listRoot.querySelector("[data-license-id]");
+
+    if (firstResult) {
+      scrollEntryToCenter(firstResult, behavior);
+    }
+  });
+}
+
+function centerFirstSearchResult() {
+  window.requestAnimationFrame(() => {
+    const firstResult =
+      listRoot.querySelector("[data-license-id]");
+
+    if (firstResult) {
+      scrollEntryToCenter(firstResult, "auto");
+      return;
+    }
+
+    const emptyMessage =
+      listRoot.querySelector(".licence-empty");
+
+    if (emptyMessage) {
+      scrollEntryToCenter(emptyMessage, "auto");
+    }
+  });
 }
 
 function specialEntry({
@@ -70,8 +125,13 @@ function specialEntry({
       />
 
       <span class="licence-entry-text">
-        <span class="licence-entry-name">${escapeHtml(title)}</span>
-        <span class="licence-entry-count">${escapeHtml(subtitle)}</span>
+        <span class="licence-entry-name">
+          ${escapeHtml(title)}
+        </span>
+
+        <span class="licence-entry-count">
+          ${escapeHtml(subtitle)}
+        </span>
       </span>
     </button>
   `;
@@ -82,25 +142,40 @@ function licenseEntry(license, index, state) {
 
   return `
     <button
-      class="licence-entry ${state.rankingScope === license.id ? "active" : ""}"
+      class="licence-entry ${
+        state.rankingScope === license.id
+          ? "active"
+          : ""
+      }"
       type="button"
       data-ranking-scope="${escapeHtml(license.id)}"
       data-license-id="${escapeHtml(license.id)}"
       style="
-        --entry-accent:${escapeHtml(license.accent || "#d83d91")};
-        --entry-offset:${Math.min((index + 2) * 9, 45)}px;
+        --entry-accent:${escapeHtml(
+          license.accent || "#d83d91"
+        )};
+        --entry-offset:${Math.min(
+          (index + 2) * 9,
+          45
+        )}px;
       "
     >
       <img
         class="licence-entry-image"
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
-        src="${escapeHtml(license.menuImage || license.background || "")}"
+        src="${escapeHtml(
+          license.menuImage ||
+          license.background ||
+          ""
+        )}"
         alt=""
       />
 
       <span class="licence-entry-text">
-        <span class="licence-entry-name">${escapeHtml(license.name)}</span>
+        <span class="licence-entry-name">
+          ${escapeHtml(license.name)}
+        </span>
 
         <span class="licence-entry-count">
           ${escapeHtml(t("gameCount", { count }))}
@@ -113,62 +188,93 @@ function licenseEntry(license, index, state) {
 export function renderLicenseMenu() {
   const state = getState();
   const catalog = getCatalog();
-  const defaultImage = catalog.app?.defaultBackground || "";
+  const defaultImage =
+    catalog.app?.defaultBackground || "";
 
   const globalEntries = [
     specialEntry({
       scopeId: SCOPE_ALL_LICENSES,
       title: t("allLicenses"),
-      subtitle: t("licenseCount", { count: catalog.licenses.length }),
-      image: catalog.app?.allLicensesMenuImage || defaultImage,
-      accent: catalog.app?.defaultAccent || "#ffd369",
-      active: state.rankingScope === SCOPE_ALL_LICENSES,
+      subtitle: t("licenseCount", {
+        count: catalog.licenses.length
+      }),
+      image:
+        catalog.app?.allLicensesMenuImage ||
+        defaultImage,
+      accent:
+        catalog.app?.defaultAccent ||
+        "#ffd369",
+      active:
+        state.rankingScope ===
+        SCOPE_ALL_LICENSES,
       index: 0
     }),
 
     specialEntry({
       scopeId: SCOPE_ALL_GAMES,
       title: t("allGames"),
-      subtitle: t("gameCount", { count: getAllItems().length }),
-      image: catalog.app?.allGamesMenuImage || defaultImage,
-      accent: catalog.app?.defaultAccentStrong || "#ffb347",
-      active: state.rankingScope === SCOPE_ALL_GAMES,
+      subtitle: t("gameCount", {
+        count: getAllItems().length
+      }),
+      image:
+        catalog.app?.allGamesMenuImage ||
+        defaultImage,
+      accent:
+        catalog.app?.defaultAccentStrong ||
+        "#ffb347",
+      active:
+        state.rankingScope ===
+        SCOPE_ALL_GAMES,
       index: 1
     })
   ].join("");
 
-  const normalizedQuery = normalizeSearch(searchQuery);
+  const normalizedQuery =
+    normalizeSearch(searchQuery);
 
-  const filteredLicenses = normalizedQuery
-    ? catalog.licenses.filter(license =>
-        normalizeSearch(license.name).includes(normalizedQuery)
+  const filteredLicenses =
+    normalizedQuery
+      ? catalog.licenses.filter(license =>
+          normalizeSearch(
+            license.name
+          ).includes(normalizedQuery)
+        )
+      : catalog.licenses;
+
+  const licenseEntries =
+    filteredLicenses
+      .map((license, index) =>
+        licenseEntry(license, index, state)
       )
-    : catalog.licenses;
-
-  const licenseEntries = filteredLicenses
-    .map((license, index) => licenseEntry(license, index, state))
-    .join("");
+      .join("");
 
   const emptyMessage =
-    normalizedQuery && filteredLicenses.length === 0
+    normalizedQuery &&
+    filteredLicenses.length === 0
       ? `
-        <div class="licence-empty" role="status">
-          <strong>${escapeHtml(t("noLicenseFound"))}</strong>
-          <span>${escapeHtml(t("tryAnotherSearch"))}</span>
+        <div
+          class="licence-empty"
+          role="status"
+        >
+          <strong>
+            ${escapeHtml(t("noLicenseFound"))}
+          </strong>
+
+          <span>
+            ${escapeHtml(t("tryAnotherSearch"))}
+          </span>
         </div>
       `
       : "";
 
-  listRoot.innerHTML = `
-    <div class="licence-global-list">
-      ${globalEntries}
-    </div>
-
-    <div class="licence-results-list">
-      ${licenseEntries}
-      ${emptyMessage}
-    </div>
-  `;
+  /*
+   * Une seule liste continue :
+   * les classements globaux puis les licences.
+   */
+  listRoot.innerHTML =
+    globalEntries +
+    licenseEntries +
+    emptyMessage;
 
   syncSearchControls();
 }
@@ -177,53 +283,114 @@ export function initLicenseMenu() {
   searchInput?.addEventListener("input", () => {
     searchQuery = searchInput.value;
     renderLicenseMenu();
-  });
 
-  searchInput?.addEventListener("keydown", event => {
-    if (event.key !== "Escape" || searchQuery.length === 0) {
-      return;
+    if (normalizeSearch(searchQuery)) {
+      centerFirstSearchResult();
+    } else {
+      centerCurrentEntry();
     }
-
-    event.stopPropagation();
-    searchQuery = "";
-    renderLicenseMenu();
-    searchInput.focus();
   });
 
-  clearSearchButton?.addEventListener("click", () => {
-    searchQuery = "";
-    renderLicenseMenu();
-    searchInput?.focus();
-  });
-
-  listRoot.addEventListener("click", event => {
-    const button = event.target.closest("[data-ranking-scope]");
-
-    if (!button) return;
-
-    const scopeId = button.dataset.rankingScope;
-    const licenseId = button.dataset.licenseId || "";
-
-    updateState(draft => {
-      draft.rankingScope = scopeId;
-      draft.finalized = false;
-
-      if (licenseId) {
-        draft.activeLicenseId = licenseId;
+  searchInput?.addEventListener(
+    "keydown",
+    event => {
+      if (
+        event.key !== "Escape" ||
+        searchQuery.length === 0
+      ) {
+        return;
       }
 
-      if (!draft.rankings[scopeId]) {
-        draft.rankings[scopeId] = [];
+      event.stopPropagation();
+
+      searchQuery = "";
+      renderLicenseMenu();
+      centerCurrentEntry();
+      searchInput.focus();
+    }
+  );
+
+  clearSearchButton?.addEventListener(
+    "click",
+    () => {
+      searchQuery = "";
+      renderLicenseMenu();
+      centerCurrentEntry();
+      searchInput?.focus();
+    }
+  );
+
+  listRoot.addEventListener(
+    "click",
+    event => {
+      const button = event.target.closest(
+        "[data-ranking-scope]"
+      );
+
+      if (!button) {
+        return;
       }
+
+      const scopeId =
+        button.dataset.rankingScope;
+
+      const licenseId =
+        button.dataset.licenseId || "";
+
+      updateState(draft => {
+        draft.rankingScope = scopeId;
+        draft.finalized = false;
+
+        if (licenseId) {
+          draft.activeLicenseId = licenseId;
+        }
+
+        if (!draft.rankings[scopeId]) {
+          draft.rankings[scopeId] = [];
+        }
+      });
+
+      searchQuery = "";
+      syncSearchControls();
+
+      rightMenu.classList.remove("open");
+      licenceDrawer.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+    }
+  );
+
+  /*
+   * À chaque ouverture, l'entrée sélectionnée est
+   * automatiquement replacée au milieu de la liste.
+   */
+  const drawerObserver =
+    new MutationObserver(() => {
+      const isOpen =
+        rightMenu.classList.contains("open");
+
+      if (isOpen && !drawerWasOpen) {
+        if (normalizeSearch(searchQuery)) {
+          centerFirstSearchResult();
+        } else {
+          centerCurrentEntry();
+        }
+      }
+
+      drawerWasOpen = isOpen;
     });
 
-    searchQuery = "";
-    syncSearchControls();
+  drawerObserver.observe(rightMenu, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
 
-    rightMenu.classList.remove("open");
-
-    document
-      .getElementById("licence-drawer")
-      .setAttribute("aria-hidden", "true");
+  window.addEventListener("resize", () => {
+    if (
+      rightMenu.classList.contains("open")
+    ) {
+      centerCurrentEntry();
+    }
   });
 }
