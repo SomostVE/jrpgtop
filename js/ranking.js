@@ -1,7 +1,10 @@
-import { getScopeItems } from "./data-loader.js";
+import {
+  getActiveItems,
+  getActiveLicense
+} from "./data-loader.js";
 import { getState, updateState } from "./state.js";
 import { t } from "./i18n.js";
-import { getRankedKeysForCurrentScope } from "./render-grid.js";
+import { getRankedKeysForCurrentLicense } from "./render-grid.js";
 
 const rankedGrid = document.getElementById("grid-ranked");
 const unrankedGrid = document.getElementById("grid-unranked");
@@ -11,12 +14,16 @@ let rankedSortable = null;
 let unrankedSortable = null;
 
 function getAvailableKeys() {
-  return getScopeItems(getState()).map(item => item.key);
+  return getActiveItems(getState()).map(item => item.key);
 }
 
 function applyRankInput(input) {
   const card = input.closest("[data-item-key]");
   if (!card) return;
+
+  const state = getState();
+  const license = getActiveLicense(state);
+  if (!license) return;
 
   const itemKey = card.dataset.itemKey;
   const raw = String(input.value || "").replace(/[^\d]/g, "").slice(0, 3);
@@ -25,13 +32,12 @@ function applyRankInput(input) {
   if (!availableKeys.includes(itemKey)) return;
 
   updateState(draft => {
-    const scope = draft.rankingScope;
-    const currentOrder = (draft.rankings[scope] || []).filter(
+    const currentOrder = (draft.rankings[license.id] || []).filter(
       key => availableKeys.includes(key) && key !== itemKey
     );
 
     if (!raw) {
-      draft.rankings[scope] = currentOrder;
+      draft.rankings[license.id] = currentOrder;
       draft.finalized = false;
       return;
     }
@@ -41,12 +47,16 @@ function applyRankInput(input) {
 
     currentOrder.splice(index, 0, itemKey);
 
-    draft.rankings[scope] = currentOrder;
+    draft.rankings[license.id] = currentOrder;
     draft.finalized = false;
   });
 }
 
 function syncOrderFromDom() {
+  const state = getState();
+  const license = getActiveLicense(state);
+  if (!license) return;
+
   const available = new Set(getAvailableKeys());
 
   const rankedKeys = [...rankedGrid.children]
@@ -54,7 +64,7 @@ function syncOrderFromDom() {
     .filter(key => available.has(key));
 
   updateState(draft => {
-    draft.rankings[draft.rankingScope] = rankedKeys;
+    draft.rankings[license.id] = rankedKeys;
     draft.finalized = false;
   });
 }
@@ -103,7 +113,7 @@ export function toggleFinalize() {
     return;
   }
 
-  if (getRankedKeysForCurrentScope().length === 0) {
+  if (getRankedKeysForCurrentLicense().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }

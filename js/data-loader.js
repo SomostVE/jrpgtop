@@ -24,7 +24,6 @@ function buildIndexes(data) {
                 title: game.title,
                 cover: game.cover,
                 logo: game.logo,
-                defaultSelected: game.defaultSelected,
                 defaultRank: game.defaultRank
               }
             ];
@@ -45,9 +44,6 @@ function buildIndexes(data) {
           themeId: variant.theme || game.theme || license.defaultTheme || "",
           cover: variant.cover || game.cover || "",
           logo: variant.logo || game.logo || license.logo || "",
-          defaultSelected: Boolean(
-            variant.defaultSelected ?? game.defaultSelected
-          ),
           defaultRank:
             Number.isFinite(Number(variant.defaultRank))
               ? Number(variant.defaultRank)
@@ -106,49 +102,35 @@ export function getLicenseById(id) {
   return licenseById.get(id) || null;
 }
 
-export function getItemsForGame(licenseId, gameId) {
-  return allItems.filter(
-    item => item.licenseId === licenseId && item.gameId === gameId
+export function getItemsForLicense(licenseId) {
+  return allItems.filter(item => item.licenseId === licenseId);
+}
+
+export function getActiveLicense(state) {
+  return (
+    getLicenseById(state.activeLicenseId) ||
+    getCatalog().licenses[0] ||
+    null
   );
 }
 
-export function getSelectedItems(state) {
-  const selected = new Set(state.selectedItems);
+export function getActiveItems(state) {
+  const license = getActiveLicense(state);
 
-  return allItems.filter(item => selected.has(item.key));
-}
-
-export function getScopeItems(state) {
-  const selectedItems = getSelectedItems(state);
-
-  if (state.rankingScope === "all") {
-    return selectedItems;
-  }
-
-  return selectedItems.filter(
-    item => item.licenseId === state.rankingScope
-  );
+  return license ? getItemsForLicense(license.id) : [];
 }
 
 export function getActiveTheme(state) {
   const data = getCatalog();
-
-  const preferredLicenseId =
-    state.rankingScope !== "all"
-      ? state.rankingScope
-      : state.activeLicenseId;
-
-  const license =
-    getLicenseById(preferredLicenseId) ||
-    data.licenses[0] ||
-    null;
+  const license = getActiveLicense(state);
 
   if (!license) {
     return {
       id: "default",
       name: "Default",
       background: data.app?.defaultBackground || "",
-      accent: data.app?.defaultAccent || "#ffd369"
+      accent: data.app?.defaultAccent || "#ffd369",
+      accentStrong: data.app?.defaultAccentStrong || "#ffb347"
     };
   }
 

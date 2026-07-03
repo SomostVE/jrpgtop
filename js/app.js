@@ -1,7 +1,8 @@
 import {
+  getActiveLicense,
   getAllItems,
   getCatalog,
-  getLicenseById,
+  getItemsForLicense,
   loadCatalog
 } from "./data-loader.js";
 import { applyTranslations, setLanguage, t } from "./i18n.js";
@@ -21,15 +22,19 @@ const configHideTitlesRow = document.getElementById("config-hide-titles-row");
 const app = document.getElementById("app");
 
 const leftMenu = document.getElementById("left-menu");
-const rightMenu = document.getElementById("right-menu");
 const leftHandle = document.getElementById("left-handle");
+
+const rightMenu = document.getElementById("right-menu");
 const rightHandle = document.getElementById("right-handle");
+const rightClose = document.getElementById("right-close");
+const rightBackdrop = document.getElementById("licence-drawer-backdrop");
+const licenceDrawer = document.getElementById("licence-drawer");
 
 const sideLanguage = document.getElementById("side-language");
 const sideSpoiler = document.getElementById("side-spoiler");
 const sideHideTitles = document.getElementById("side-hide-titles");
 const sideHideTitlesRow = document.getElementById("side-hide-titles-row");
-const rankingScope = document.getElementById("ranking-scope");
+const themeSelect = document.getElementById("theme-select");
 
 const finalizeButton = document.getElementById("btn-finalize");
 const previewButton = document.getElementById("btn-preview");
@@ -71,7 +76,6 @@ function syncHideTitleAvailability(spoilerOn, source = "side") {
 
 function initializeDefaults() {
   const catalog = getCatalog();
-  const state = getState();
   const validLicenseIds = new Set(catalog.licenses.map(license => license.id));
   const validItemKeys = new Set(getAllItems().map(item => item.key));
 
@@ -81,53 +85,34 @@ function initializeDefaults() {
         draft.activeLicenseId = catalog.licenses[0]?.id || "";
       }
 
-      if (
-        draft.rankingScope !== "all" &&
-        !validLicenseIds.has(draft.rankingScope)
-      ) {
-        draft.rankingScope = "all";
-      }
-
-      draft.selectedItems = draft.selectedItems.filter(key =>
-        validItemKeys.has(key)
-      );
-
-      for (const scope of Object.keys(draft.rankings)) {
-        draft.rankings[scope] = draft.rankings[scope].filter(key =>
-          validItemKeys.has(key)
+      for (const license of catalog.licenses) {
+        const available = new Set(
+          getItemsForLicense(license.id).map(item => item.key)
         );
+
+        draft.rankings[license.id] = (
+          draft.rankings[license.id] || []
+        ).filter(key => available.has(key) && validItemKeys.has(key));
+
+        const initialTheme =
+          license.defaultTheme || license.themes?.[0]?.id;
+
+        if (
+          initialTheme &&
+          !draft.selectedThemeByLicense[license.id]
+        ) {
+          draft.selectedThemeByLicense[license.id] = initialTheme;
+        }
       }
 
       if (!draft.initialized) {
-        const defaults = getAllItems().filter(item => item.defaultSelected);
-
-        draft.selectedItems = defaults.map(item => item.key);
-
-        const defaultOrder = defaults
-          .filter(item => Number.isFinite(item.defaultRank))
-          .sort((a, b) => a.defaultRank - b.defaultRank)
-          .map(item => item.key);
-
-        draft.rankings.all = defaultOrder;
-
         for (const license of catalog.licenses) {
-          const licenseOrder = defaults
-            .filter(
-              item =>
-                item.licenseId === license.id &&
-                Number.isFinite(item.defaultRank)
-            )
+          const defaultOrder = getItemsForLicense(license.id)
+            .filter(item => Number.isFinite(item.defaultRank))
             .sort((a, b) => a.defaultRank - b.defaultRank)
             .map(item => item.key);
 
-          draft.rankings[license.id] = licenseOrder;
-
-          const initialTheme =
-            license.defaultTheme || license.themes?.[0]?.id;
-
-          if (initialTheme) {
-            draft.selectedThemeByLicense[license.id] = initialTheme;
-          }
+          draft.rankings[license.id] = defaultOrder;
         }
 
         draft.initialized = true;
@@ -137,30 +122,29 @@ function initializeDefaults() {
       emit: false
     }
   );
-
-  if (!state.initialized) {
-    // L'état a été sauvegardé par updateState.
-  }
 }
 
-function populateScopeSelect() {
+function populateThemeSelect() {
   const state = getState();
-  const catalog = getCatalog();
+  const license = getActiveLicense(state);
+  const themes = license?.themes || [];
 
-  rankingScope.innerHTML = `
-    <option value="all">${t("allGames")}</option>
-    ${catalog.licenses
-      .map(
-        license => `
-          <option value="${license.id}">
-            ${license.name}
-          </option>
-        `
-      )
-      .join("")}
-  `;
+  themeSelect.innerHTML = themes
+    .map(
+      theme => `
+        <option value="${theme.id}">${theme.name}</option>
+      `
+    )
+    .join("");
 
-  rankingScope.value = state.rankingScope;
+  const selectedTheme =
+    state.selectedThemeByLicense[license?.id] ||
+    license?.defaultTheme ||
+    themes[0]?.id ||
+    "";
+
+  themeSelect.value = selectedTheme;
+  themeSelect.disabled = themes.length <= 1;
 }
 
 function syncControls() {
@@ -169,13 +153,13 @@ function syncControls() {
   sideLanguage.value = state.lang;
   sideSpoiler.checked = state.spoilerOn;
   sideHideTitles.checked = state.hideTitles;
-  rankingScope.value = state.rankingScope;
 
   finalizeButton.textContent = state.finalized
     ? t("editTop")
     : t("finalizeTop");
 
   syncHideTitleAvailability(state.spoilerOn, "render");
+  populateThemeSelect();
 }
 
 function renderAll() {
@@ -183,7 +167,6 @@ function renderAll() {
 
   setLanguage(state.lang);
   applyTranslations();
-  populateScopeSelect();
   renderGrid();
   renderLicenseMenu();
   syncControls();
@@ -200,6 +183,17 @@ function showApp() {
   document.body.classList.add("app-started");
 
   renderAll();
+}
+
+function openLicenseDrawer() {
+  rightMenu.classList.add("open");
+  licenceDrawer.setAttribute("aria-hidden", "false");
+  leftMenu.classList.remove("open");
+}
+
+function closeLicenseDrawer() {
+  rightMenu.classList.remove("open");
+  licenceDrawer.setAttribute("aria-hidden", "true");
 }
 
 function bindConfiguration() {
@@ -236,13 +230,12 @@ function bindConfiguration() {
 function bindPanels() {
   leftHandle.addEventListener("click", () => {
     leftMenu.classList.toggle("open");
-    rightMenu.classList.remove("open");
+    closeLicenseDrawer();
   });
 
-  rightHandle.addEventListener("click", () => {
-    rightMenu.classList.toggle("open");
-    leftMenu.classList.remove("open");
-  });
+  rightHandle.addEventListener("click", openLicenseDrawer);
+  rightClose.addEventListener("click", closeLicenseDrawer);
+  rightBackdrop.addEventListener("click", closeLicenseDrawer);
 
   document.addEventListener("pointerdown", event => {
     if (
@@ -250,13 +243,6 @@ function bindPanels() {
       !leftMenu.contains(event.target)
     ) {
       leftMenu.classList.remove("open");
-    }
-
-    if (
-      rightMenu.classList.contains("open") &&
-      !rightMenu.contains(event.target)
-    ) {
-      rightMenu.classList.remove("open");
     }
   });
 }
@@ -268,21 +254,12 @@ function bindSideControls() {
     });
   });
 
-  rankingScope.addEventListener("change", () => {
+  themeSelect.addEventListener("change", () => {
+    const license = getActiveLicense(getState());
+    if (!license) return;
+
     updateState(draft => {
-      draft.rankingScope = rankingScope.value;
-      draft.finalized = false;
-
-      if (
-        draft.rankingScope !== "all" &&
-        getLicenseById(draft.rankingScope)
-      ) {
-        draft.activeLicenseId = draft.rankingScope;
-      }
-
-      if (!draft.rankings[draft.rankingScope]) {
-        draft.rankings[draft.rankingScope] = [];
-      }
+      draft.selectedThemeByLicense[license.id] = themeSelect.value;
     });
   });
 
@@ -307,12 +284,12 @@ function bindSideControls() {
   finalizeButton.addEventListener("click", () => {
     toggleFinalize();
     leftMenu.classList.remove("open");
-    rightMenu.classList.remove("open");
+    closeLicenseDrawer();
   });
 
-  previewButton.addEventListener("click", async () => {
+  previewButton.addEventListener("click", () => {
     leftMenu.classList.remove("open");
-    await openPreview();
+    openPreview();
   });
 
   guideButton.addEventListener("click", () => {
@@ -335,7 +312,7 @@ function bindSideControls() {
     if (event.key !== "Escape") return;
 
     leftMenu.classList.remove("open");
-    rightMenu.classList.remove("open");
+    closeLicenseDrawer();
 
     if (!previewModal.hidden) {
       closePreview();

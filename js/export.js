@@ -1,12 +1,14 @@
-import { getLicenseById } from "./data-loader.js";
+import { getActiveLicense } from "./data-loader.js";
 import { getState } from "./state.js";
 import { t } from "./i18n.js";
-import { getRankedItemsForCurrentScope } from "./render-grid.js";
+import { getRankedItemsForCurrentLicense } from "./render-grid.js";
 
 const exportStage = document.getElementById("export-stage");
 const previewModal = document.getElementById("preview-modal");
-const previewImage = document.getElementById("preview-image");
-const previewLoading = document.getElementById("preview-loading");
+const previewViewport = document.getElementById("preview-viewport");
+const previewMount = document.getElementById("preview-mount");
+
+let previewResizeHandler = null;
 
 async function waitForImages(root) {
   const images = [...root.querySelectorAll("img")];
@@ -48,7 +50,7 @@ async function waitForImages(root) {
   );
 }
 
-async function captureExportCanvas(scale = 1) {
+async function captureExportCanvas() {
   if (!window.html2canvas) {
     throw new Error("html2canvas n'est pas chargé.");
   }
@@ -62,35 +64,44 @@ async function captureExportCanvas(scale = 1) {
     logging: false,
     width: 1920,
     height: 1080,
-    scale
+    scale: 1,
+    scrollX: 0,
+    scrollY: 0
   });
 }
 
 function getFileName() {
   const state = getState();
+  const license = getActiveLicense(state);
 
-  const scopeName =
-    state.rankingScope === "all"
-      ? "All"
-      : getLicenseById(state.rankingScope)?.name || state.rankingScope;
-
-  const safeScope = scopeName
+  const safeName = (license?.name || "Ranking")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-  return `JRPGTop-${safeScope || "Ranking"}.png`;
+  return `JRPGTop-${safeName || "Ranking"}.png`;
+}
+
+function fitPreview() {
+  const stage = previewMount.firstElementChild;
+  if (!stage) return;
+
+  const width = previewViewport.clientWidth;
+  const scale = width / 1920;
+
+  previewViewport.style.height = `${1080 * scale}px`;
+  stage.style.transform = `scale(${scale})`;
 }
 
 export async function exportTop() {
-  if (getRankedItemsForCurrentScope().length === 0) {
+  if (getRankedItemsForCurrentLicense().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }
 
   try {
-    const canvas = await captureExportCanvas(1);
+    const canvas = await captureExportCanvas();
     const link = document.createElement("a");
 
     link.download = getFileName();
@@ -102,29 +113,35 @@ export async function exportTop() {
   }
 }
 
-export async function openPreview() {
-  if (getRankedItemsForCurrentScope().length === 0) {
+export function openPreview() {
+  if (getRankedItemsForCurrentLicense().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }
 
-  previewImage.removeAttribute("src");
-  previewImage.hidden = true;
-  previewLoading.hidden = false;
+  previewMount.innerHTML = "";
+
+  const clone = exportStage.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.classList.remove("export-stage");
+  clone.classList.add("preview-stage");
+  clone.setAttribute("aria-hidden", "true");
+
+  previewMount.appendChild(clone);
   previewModal.hidden = false;
 
-  try {
-    const canvas = await captureExportCanvas(0.5);
+  window.requestAnimationFrame(fitPreview);
 
-    previewImage.src = canvas.toDataURL("image/png");
-    previewImage.hidden = false;
-    previewLoading.hidden = true;
-  } catch (error) {
-    console.error("Preview failed:", error);
-    previewLoading.textContent = t("previewFailed");
-  }
+  previewResizeHandler = () => fitPreview();
+  window.addEventListener("resize", previewResizeHandler);
 }
 
 export function closePreview() {
   previewModal.hidden = true;
+  previewMount.innerHTML = "";
+
+  if (previewResizeHandler) {
+    window.removeEventListener("resize", previewResizeHandler);
+    previewResizeHandler = null;
+  }
 }

@@ -1,7 +1,7 @@
-const STORAGE_KEY = "jrpgtop-state-v1";
+const STORAGE_KEY = "jrpgtop-state-v2";
 
 const DEFAULT_STATE = {
-  version: 1,
+  version: 2,
   initialized: false,
 
   lang: "fr",
@@ -9,15 +9,9 @@ const DEFAULT_STATE = {
   hideTitles: false,
   finalized: false,
 
-  rankingScope: "all",
   activeLicenseId: "",
-  search: "",
-
-  selectedItems: [],
   selectedThemeByLicense: {},
-  rankings: {
-    all: []
-  }
+  rankings: {}
 };
 
 let state = loadState();
@@ -37,10 +31,6 @@ function normalizeState(candidate) {
     ...(candidate && typeof candidate === "object" ? candidate : {})
   };
 
-  next.selectedItems = Array.isArray(next.selectedItems)
-    ? [...new Set(next.selectedItems.filter(Boolean))]
-    : [];
-
   next.selectedThemeByLicense =
     next.selectedThemeByLicense && typeof next.selectedThemeByLicense === "object"
       ? next.selectedThemeByLicense
@@ -49,32 +39,20 @@ function normalizeState(candidate) {
   next.rankings =
     next.rankings && typeof next.rankings === "object"
       ? next.rankings
-      : { all: [] };
+      : {};
 
-  if (!Array.isArray(next.rankings.all)) {
-    next.rankings.all = [];
-  }
-
-  for (const [scope, order] of Object.entries(next.rankings)) {
-    next.rankings[scope] = Array.isArray(order)
+  for (const [licenseId, order] of Object.entries(next.rankings)) {
+    next.rankings[licenseId] = Array.isArray(order)
       ? [...new Set(order.filter(Boolean))]
       : [];
   }
 
-  if (!["fr", "en"].includes(next.lang)) {
-    next.lang = "fr";
+  if (!['fr', 'en'].includes(next.lang)) {
+    next.lang = 'fr';
   }
 
-  if (typeof next.rankingScope !== "string" || !next.rankingScope) {
-    next.rankingScope = "all";
-  }
-
-  if (typeof next.activeLicenseId !== "string") {
-    next.activeLicenseId = "";
-  }
-
-  if (typeof next.search !== "string") {
-    next.search = "";
+  if (typeof next.activeLicenseId !== 'string') {
+    next.activeLicenseId = '';
   }
 
   next.spoilerOn = Boolean(next.spoilerOn);
@@ -146,10 +124,4 @@ export function subscribe(listener) {
   return () => {
     listeners.delete(listener);
   };
-}
-
-export function resetState() {
-  state = clone(DEFAULT_STATE);
-  saveState();
-  emit();
 }

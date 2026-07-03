@@ -9,52 +9,38 @@ const translations = {
 
     options: "OPTIONS",
     language: "Langue",
-    rankingScope: "Classement",
-    allGames: "Tous les jeux",
+    theme: "Thème",
     antiSpoiler: "Anti-spoiler",
-    preview: "Aperçu 1920×1080",
+    finalPreview: "Aperçu final",
     guide: "Guide",
     exportImage: "Exporter en PNG",
     finalizeTop: "Finaliser le top",
     editTop: "Revenir à l'édition",
 
-    selectContent: "SÉLECTION",
-    search: "Rechercher",
-    searchPlaceholder: "Rechercher un jeu...",
-    themes: "Thèmes",
-    games: "Jeux",
-    selectAll: "Tout ajouter",
-    clearLicense: "Tout retirer",
-    noResults: "Aucun jeu trouvé.",
+    licenses: "LICENCES",
+    chooseLicense: "Choisir une licence",
+    gameCount: "{count} jeu(x)",
 
     unranked: "NON CLASSÉ(S)",
     noCover: "PAS D'IMAGE",
-    selectedCount: "{selected} sélectionné(s)",
-    rankedCount: "{ranked} classé(s) sur {selected}",
-
-    emptySelectionTitle: "Aucun jeu sélectionné",
-    emptySelectionText:
-      "Ouvre le menu de droite pour choisir des licences et des jeux.",
+    rankedCount: "{ranked} classé(s) sur {total}",
 
     guideTitle: "Comment utiliser JRPGTop",
-    guideStep1Title: "Choisis les jeux",
+    guideStep1Title: "Choisis une licence",
     guideStep1Text:
-      "Ouvre le menu de droite, sélectionne une licence puis les jeux ou variantes OG/Remake.",
-    guideStep2Title: "Classe ton top",
+      "Ouvre le menu de droite. Tous les jeux de la licence choisie sont chargés automatiquement.",
+    guideStep2Title: "Choisis le thème",
     guideStep2Text:
-      "Fais glisser les cartes ou saisis directement leur numéro.",
-    guideStep3Title: "Change de portée",
+      "Le menu de gauche propose uniquement les thèmes disponibles pour la licence actuelle.",
+    guideStep3Title: "Classe ton top",
     guideStep3Text:
-      "Fais un classement général ou un classement indépendant pour une licence.",
+      "Fais glisser les cartes ou saisis directement leur numéro.",
     guideStep4Title: "Finalise",
     guideStep4Text:
       "Le mode final masque les jeux non classés et centre uniquement le top utilisé.",
     guideStep5Title: "Prévisualise et exporte",
     guideStep5Text:
-      "L'export est toujours généré en 1920×1080, même depuis un téléphone.",
-
-    previewTitle: "Aperçu de l'export",
-    generatingPreview: "Génération de l'aperçu...",
+      "L'aperçu final montre exactement le rendu exporté, y compris depuis un téléphone.",
 
     confirmFinalize:
       "Finaliser ce top ? Les jeux non classés seront masqués.",
@@ -62,8 +48,6 @@ const translations = {
       "Classe au moins un jeu avant de finaliser ou d'exporter.",
     exportFailed:
       "L'export a échoué. Vérifie la console du navigateur.",
-    previewFailed:
-      "La génération de l'aperçu a échoué.",
 
     loadingError:
       "Impossible de charger le catalogue. Ouvre le projet avec GitHub Pages ou un serveur local, pas directement avec file://."
@@ -79,52 +63,38 @@ const translations = {
 
     options: "OPTIONS",
     language: "Language",
-    rankingScope: "Ranking",
-    allGames: "All games",
+    theme: "Theme",
     antiSpoiler: "Anti-spoiler",
-    preview: "1920×1080 preview",
+    finalPreview: "Final preview",
     guide: "Guide",
     exportImage: "Export PNG",
     finalizeTop: "Finalize top",
     editTop: "Return to editing",
 
-    selectContent: "SELECTION",
-    search: "Search",
-    searchPlaceholder: "Search for a game...",
-    themes: "Themes",
-    games: "Games",
-    selectAll: "Add all",
-    clearLicense: "Remove all",
-    noResults: "No game found.",
+    licenses: "LICENCES",
+    chooseLicense: "Choose a licence",
+    gameCount: "{count} game(s)",
 
     unranked: "UNRANKED",
     noCover: "NO COVER",
-    selectedCount: "{selected} selected",
-    rankedCount: "{ranked} ranked out of {selected}",
-
-    emptySelectionTitle: "No game selected",
-    emptySelectionText:
-      "Open the right menu to choose licences and games.",
+    rankedCount: "{ranked} ranked out of {total}",
 
     guideTitle: "How to use JRPGTop",
-    guideStep1Title: "Choose games",
+    guideStep1Title: "Choose a licence",
     guideStep1Text:
-      "Open the right menu, select a licence, then choose games or OG/Remake variants.",
-    guideStep2Title: "Rank your top",
+      "Open the right menu. Every game from the chosen licence is loaded automatically.",
+    guideStep2Title: "Choose the theme",
     guideStep2Text:
-      "Drag cards or directly enter their rank number.",
-    guideStep3Title: "Change scope",
+      "The left menu only shows themes available for the current licence.",
+    guideStep3Title: "Rank your top",
     guideStep3Text:
-      "Create an overall ranking or an independent ranking for one licence.",
+      "Drag cards or directly enter their rank number.",
     guideStep4Title: "Finalize",
     guideStep4Text:
       "Final mode hides unranked games and centers only the used ranking.",
     guideStep5Title: "Preview and export",
     guideStep5Text:
-      "The export is always generated in 1920×1080, even from a phone.",
-
-    previewTitle: "Export preview",
-    generatingPreview: "Generating preview...",
+      "Final preview shows the exact exported result, including on a phone.",
 
     confirmFinalize:
       "Finalize this top? Unranked games will be hidden.",
@@ -132,8 +102,6 @@ const translations = {
       "Rank at least one game before finalizing or exporting.",
     exportFailed:
       "Export failed. Check the browser console.",
-    previewFailed:
-      "Preview generation failed.",
 
     loadingError:
       "The catalog could not be loaded. Open the project with GitHub Pages or a local server, not directly with file://."
@@ -166,10 +134,5 @@ export function applyTranslations(root = document) {
   root.querySelectorAll("[data-i18n]").forEach(element => {
     const key = element.dataset.i18n;
     element.textContent = t(key);
-  });
-
-  root.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
-    const key = element.dataset.i18nPlaceholder;
-    element.setAttribute("placeholder", t(key));
   });
 }
