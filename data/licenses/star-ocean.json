@@ -1,0 +1,63 @@
+{
+  "id": "star-ocean",
+  "name": "Star Ocean",
+  "accent": "#ff8fc6",
+  "accentStrong": "#c74997",
+  "menuImage": "https://placehold.co/640x360/4b1740/ffffff?text=Star+Ocean",
+  "defaultTheme": "space",
+  "themes": [
+    {
+      "id": "space",
+      "name": "Space",
+      "background": "https://placehold.co/1920x1080/100d27/ffd8f3?text=Star+Ocean",
+      "accent": "#ff8fc6",
+      "accentStrong": "#c74997"
+    }
+  ],
+  "games": [
+    {
+      "id": "first-departure",
+      "title": "Star Ocean: First Departure",
+      "theme": "space",
+      "logo": "https://placehold.co/900x300/171126/ffffff?text=STAR+OCEAN",
+      "variants": [
+        {
+          "id": "og",
+          "label": "OG",
+          "type": "original",
+          "title": "Star Ocean",
+          "cover": "https://placehold.co/600x800/3b2445/ffffff?text=Star+Ocean+OG"
+        },
+        {
+          "id": "remake",
+          "label": "Remake",
+          "type": "remake",
+          "title": "Star Ocean: First Departure R",
+          "cover": "https://placehold.co/600x800/4b3159/ffffff?text=First+Departure+R"
+        }
+      ]
+    },
+    {
+      "id": "second-story",
+      "title": "Star Ocean: The Second Story",
+      "theme": "space",
+      "logo": "https://placehold.co/900x300/171126/ffffff?text=STAR+OCEAN+2",
+      "variants": [
+        {
+          "id": "og",
+          "label": "OG",
+          "type": "original",
+          "title": "Star Ocean: The Second Story",
+          "cover": "https://placehold.co/600x800/3b2445/ffffff?text=Second+Story+OG"
+        },
+        {
+          "id": "remake",
+          "label": "Remake",
+          "type": "remake",
+          "title": "Star Ocean: The Second Story R",
+          "cover": "https://placehold.co/600x800/4b3159/ffffff?text=Second+Story+R"
+        }
+      ]
+    }
+  ]
+}

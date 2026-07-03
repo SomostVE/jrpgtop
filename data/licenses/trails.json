@@ -1,0 +1,162 @@
+{
+  "id": "trails",
+  "name": "Trails",
+  "accent": "#ffd369",
+  "accentStrong": "#ffb347",
+  "menuImage": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Trails_in_the_Sky_artwork.jpg/250px-Trails_in_the_Sky_artwork.jpg",
+  "defaultTheme": "sky",
+  "themes": [
+    {
+      "id": "sky",
+      "name": "Liberl / Sky",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#ffd369",
+      "accentStrong": "#ffb347"
+    },
+    {
+      "id": "crossbell",
+      "name": "Crossbell",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#65d8ff",
+      "accentStrong": "#3da5ff"
+    },
+    {
+      "id": "cold-steel",
+      "name": "Erebonia / Cold Steel",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#ff756f",
+      "accentStrong": "#c74458"
+    },
+    {
+      "id": "daybreak",
+      "name": "Calvard / Daybreak",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#8bd65c",
+      "accentStrong": "#4b9d45"
+    }
+  ],
+  "games": [
+    {
+      "id": "sky-fc",
+      "title": "Trails in the Sky",
+      "theme": "sky",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/4/45/Sora_no_Kiseki_the_1st_Logo_%28En%29.png/revision/latest/scale-to-width-down/1000?cb=20241223232411",
+      "variants": [
+        {
+          "id": "og",
+          "label": "OG",
+          "type": "original",
+          "title": "Trails in the Sky FC",
+          "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Trails_in_the_Sky_artwork.jpg/250px-Trails_in_the_Sky_artwork.jpg",
+          "logo": "assets/trails/sky-fc-logo.png"
+        },
+        {
+          "id": "remake",
+          "label": "Remake",
+          "type": "remake",
+          "title": "Trails in the Sky 1st Chapter",
+          "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Trails_in_the_Sky_1st_Chapter_artwork.png/250px-Trails_in_the_Sky_1st_Chapter_artwork.png",
+          "defaultSelected": true,
+          "defaultRank": 1
+        }
+      ]
+    },
+    {
+      "id": "sky-sc",
+      "title": "Trails in the Sky SC",
+      "theme": "sky",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Trails_in_the_Sky_SC_artwork.jpg/250px-Trails_in_the_Sky_SC_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/7/73/Trails_in_the_Sky_SC_Logo.png/revision/latest?cb=20220219123126",
+      "defaultSelected": true,
+      "defaultRank": 2
+    },
+    {
+      "id": "sky-3rd",
+      "title": "Trails in the Sky the 3rd",
+      "theme": "sky",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Trails_in_the_Sky_the_3rd_artwork.jpg/250px-Trails_in_the_Sky_the_3rd_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/e/e5/Trails_in_the_Sky_3rd_logo.png/revision/latest?cb=20220219124002",
+      "defaultSelected": true
+    },
+    {
+      "id": "zero",
+      "title": "Trails from Zero",
+      "theme": "crossbell",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/Trails_from_Zero.jpg/250px-Trails_from_Zero.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/c/cd/Trails_from_Zero_-_Light_BG_%28Logo%29.png/revision/latest/scale-to-width-down/1000?cb=20210625055653",
+      "defaultSelected": true
+    },
+    {
+      "id": "azure",
+      "title": "Trails to Azure",
+      "theme": "crossbell",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/Trails_to_Azure_Steam_artwork.jpg/250px-Trails_to_Azure_Steam_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/7/75/Trails_to_Azure_-_Light_BG_%28Logo%29.png/revision/latest/scale-to-width-down/1000?cb=20210625055711",
+      "defaultSelected": true
+    },
+    {
+      "id": "cold-steel-1",
+      "title": "Trails of Cold Steel",
+      "theme": "cold-steel",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Trails_of_Cold_Steel_Steam_artwork.jpg/250px-Trails_of_Cold_Steel_Steam_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/f/ff/Trails_of_Cold_Steel_Logo_%28Sen%29.png/revision/latest?cb=20170526122740",
+      "defaultSelected": true
+    },
+    {
+      "id": "cold-steel-2",
+      "title": "Trails of Cold Steel II",
+      "theme": "cold-steel",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/8/81/Trails_of_Cold_Steel_II_Steam_artwork.jpg/250px-Trails_of_Cold_Steel_II_Steam_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/7/73/Trails_of_Cold_Steel_II_Logo_%28Sen_II%29.png/revision/latest/scale-to-width-down/1000?cb=20170526155421",
+      "defaultSelected": true
+    },
+    {
+      "id": "cold-steel-3",
+      "title": "Trails of Cold Steel III",
+      "theme": "cold-steel",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/1/15/Trails_of_Cold_Steel_III_Steam_artwork.jpg/250px-Trails_of_Cold_Steel_III_Steam_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/e/ef/Trails_of_Cold_Steel_III_logo.png/revision/latest/scale-to-width-down/1000?cb=20190312132538",
+      "defaultSelected": true
+    },
+    {
+      "id": "cold-steel-4",
+      "title": "Trails of Cold Steel IV",
+      "theme": "cold-steel",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/c/cd/Trails_of_Cold_Steel_IV_Cover_Art.png",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/e/e1/Trails_of_Cold_Steel_IV_logo.png/revision/latest?cb=20200513014157",
+      "defaultSelected": true
+    },
+    {
+      "id": "reverie",
+      "title": "Trails into Reverie",
+      "theme": "cold-steel",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/1/13/Trails_into_Reverie_Cover_Art.jpg/250px-Trails_into_Reverie_Cover_Art.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/3/35/Trails_into_Reverie_-_Light_BG_%28Logo%29.webp/revision/latest/scale-to-width-down/1000?cb=20210625131458",
+      "defaultSelected": true
+    },
+    {
+      "id": "daybreak",
+      "title": "Trails through Daybreak",
+      "theme": "daybreak",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Trails_through_Daybreak_artwork.jpg/250px-Trails_through_Daybreak_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/e/ed/Trails_Through_Daybreak_long_logo.webp/revision/latest?cb=20240121111226",
+      "defaultSelected": true
+    },
+    {
+      "id": "daybreak-2",
+      "title": "Trails through Daybreak II",
+      "theme": "daybreak",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Trails_through_Daybreak_II_artwork.jpg/250px-Trails_through_Daybreak_II_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/0/00/Trails_Through_Daybreak_II_logo.png/revision/latest/scale-to-width-down/1000?cb=20240706153858",
+      "defaultSelected": true
+    },
+    {
+      "id": "beyond-horizon",
+      "title": "Trails beyond the Horizon",
+      "theme": "daybreak",
+      "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/Trails_Beyond_the_Horizon_artwork.jpg/250px-Trails_Beyond_the_Horizon_artwork.jpg",
+      "logo": "https://static.wikia.nocookie.net/kiseki/images/a/ae/Trails_beyond_the_Horizon_%28Logo%29.webp/revision/latest/scale-to-width-down/1000?cb=20250330214238",
+      "defaultSelected": true
+    }
+  ]
+}

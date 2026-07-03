@@ -1,0 +1,110 @@
+{
+  "id": "ys",
+  "name": "Ys",
+  "accent": "#ef3f45",
+  "accentStrong": "#a81922",
+  "menuImage": "assets/ys/menu.jpg",
+  "defaultTheme": "esteria",
+  "themes": [
+    {
+      "id": "esteria",
+      "name": "Esteria",
+      "background": "assets/ys/themes/esteria.jpg",
+      "accent": "#ef3f45",
+      "accentStrong": "#a81922"
+    },
+    {
+      "id": "felghana",
+      "name": "Felghana",
+      "background": "assets/ys/themes/felghana.jpg",
+      "accent": "#f08a35",
+      "accentStrong": "#ba4c1d"
+    },
+    {
+      "id": "celceta",
+      "name": "Celceta",
+      "background": "assets/ys/themes/celceta.jpg",
+      "accent": "#7dcc50",
+      "accentStrong": "#3e8f32"
+    },
+    {
+      "id": "seiren",
+      "name": "Seiren",
+      "background": "assets/ys/themes/seiren.jpg",
+      "accent": "#55c8e8",
+      "accentStrong": "#2676ba"
+    },
+    {
+      "id": "balduq",
+      "name": "Balduq",
+      "background": "assets/ys/themes/balduq.jpg",
+      "accent": "#a68cff",
+      "accentStrong": "#6345b8"
+    },
+    {
+      "id": "obelia",
+      "name": "Obelia Gulf",
+      "background": "assets/ys/themes/obelia.jpg",
+      "accent": "#67d1d0",
+      "accentStrong": "#298a96"
+    }
+  ],
+  "games": [
+    {
+      "id": "ys-1",
+      "title": "Ys I",
+      "theme": "esteria",
+      "cover": "assets/ys/covers/ys-1.jpg",
+      "logo": "assets/ys/logos/ys-1.png"
+    },
+    {
+      "id": "ys-2",
+      "title": "Ys II",
+      "theme": "esteria",
+      "cover": "assets/ys/covers/ys-2.jpg",
+      "logo": "assets/ys/logos/ys-2.png"
+    },
+    {
+      "id": "ys-origin",
+      "title": "Ys Origin",
+      "theme": "esteria",
+      "cover": "assets/ys/covers/ys-origin.jpg",
+      "logo": "assets/ys/logos/ys-origin.png"
+    },
+    {
+      "id": "ys-oath-in-felghana",
+      "title": "Ys: The Oath in Felghana",
+      "theme": "felghana",
+      "cover": "assets/ys/covers/ys-oath-in-felghana.jpg",
+      "logo": "assets/ys/logos/ys-oath-in-felghana.png"
+    },
+    {
+      "id": "ys-memories-of-celceta",
+      "title": "Ys: Memories of Celceta",
+      "theme": "celceta",
+      "cover": "assets/ys/covers/ys-memories-of-celceta.jpg",
+      "logo": "assets/ys/logos/ys-memories-of-celceta.png"
+    },
+    {
+      "id": "ys-8",
+      "title": "Ys VIII: Lacrimosa of Dana",
+      "theme": "seiren",
+      "cover": "assets/ys/covers/ys-8.jpg",
+      "logo": "assets/ys/logos/ys-8.png"
+    },
+    {
+      "id": "ys-9",
+      "title": "Ys IX: Monstrum Nox",
+      "theme": "balduq",
+      "cover": "assets/ys/covers/ys-9.jpg",
+      "logo": "assets/ys/logos/ys-9.png"
+    },
+    {
+      "id": "ys-10",
+      "title": "Ys X: Nordics",
+      "theme": "obelia",
+      "cover": "assets/ys/covers/ys-10.jpg",
+      "logo": "assets/ys/logos/ys-10.png"
+    }
+  ]
+}
