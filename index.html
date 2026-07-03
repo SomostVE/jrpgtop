@@ -90,13 +90,6 @@
           <div id="ranking-summary" class="ranking-summary"></div>
         </header>
 
-        <div id="empty-state" class="empty-state">
-          <strong data-i18n="emptySelectionTitle">Aucun jeu sélectionné</strong>
-          <span data-i18n="emptySelectionText">
-            Ouvre le menu de droite pour choisir des licences et des jeux.
-          </span>
-        </div>
-
         <div id="grid-wrapper" class="grid-wrapper">
           <section id="ranked-section" class="section">
             <div id="grid-ranked" class="grid"></div>
@@ -119,7 +112,7 @@
   <aside id="left-menu" class="side-menu side-menu-left" data-ignore-export="true">
     <button id="left-handle" class="side-handle" type="button" aria-label="Options">☰</button>
 
-    <div class="side-panel">
+    <div class="side-panel options-panel">
       <div class="side-caption" data-i18n="options">OPTIONS</div>
 
       <label class="panel-row">
@@ -131,8 +124,8 @@
       </label>
 
       <label class="panel-row">
-        <span data-i18n="rankingScope">Classement</span>
-        <select id="ranking-scope" class="select"></select>
+        <span data-i18n="theme">Thème</span>
+        <select id="theme-select" class="select"></select>
       </label>
 
       <label class="panel-row">
@@ -153,8 +146,8 @@
 
       <div class="panel-buttons">
         <button id="btn-finalize" class="panel-button primary" type="button"></button>
-        <button id="btn-preview" class="panel-button" type="button" data-i18n="preview">
-          Aperçu 1920×1080
+        <button id="btn-preview" class="panel-button" type="button" data-i18n="finalPreview">
+          Aperçu final
         </button>
         <button id="btn-guide" class="panel-button" type="button" data-i18n="guide">
           Guide
@@ -166,26 +159,23 @@
     </div>
   </aside>
 
-  <aside id="right-menu" class="side-menu side-menu-right" data-ignore-export="true">
-    <button id="right-handle" class="side-handle" type="button" aria-label="Licences">☰</button>
+  <aside id="right-menu" class="licence-drawer-wrap" data-ignore-export="true">
+    <button id="right-handle" class="side-handle licence-handle" type="button" aria-label="Licences">☰</button>
 
-    <div id="right-panel" class="side-panel licence-panel">
-      <div class="side-caption" data-i18n="selectContent">SÉLECTION</div>
+    <div id="licence-drawer-backdrop" class="licence-drawer-backdrop"></div>
 
-      <label class="search-box">
-        <span class="visually-hidden" data-i18n="search">Rechercher</span>
-        <input
-          id="licence-search"
-          type="search"
-          autocomplete="off"
-          data-i18n-placeholder="searchPlaceholder"
-          placeholder="Rechercher un jeu..."
-        />
-      </label>
+    <section id="licence-drawer" class="licence-drawer" aria-hidden="true">
+      <header class="licence-drawer-header">
+        <div>
+          <div class="side-caption" data-i18n="licenses">LICENCES</div>
+          <h2 data-i18n="chooseLicense">Choisir une licence</h2>
+        </div>
+
+        <button id="right-close" class="drawer-close" type="button" aria-label="Fermer">×</button>
+      </header>
 
       <div id="licence-list" class="licence-list"></div>
-      <div id="licence-detail" class="licence-detail"></div>
-    </div>
+    </section>
   </aside>
 
   <div id="guide-modal" class="modal" hidden data-ignore-export="true">
@@ -198,23 +188,23 @@
 
       <ol class="guide-steps">
         <li>
-          <strong data-i18n="guideStep1Title">Choisis les jeux</strong>
+          <strong data-i18n="guideStep1Title">Choisis une licence</strong>
           <span data-i18n="guideStep1Text">
-            Ouvre le menu de droite, sélectionne une licence puis les jeux ou variantes OG/Remake.
+            Ouvre le menu de droite. Tous les jeux de la licence choisie sont chargés automatiquement.
           </span>
         </li>
 
         <li>
-          <strong data-i18n="guideStep2Title">Classe ton top</strong>
+          <strong data-i18n="guideStep2Title">Choisis le thème</strong>
           <span data-i18n="guideStep2Text">
-            Fais glisser les cartes ou saisis directement leur numéro.
+            Le menu de gauche propose uniquement les thèmes disponibles pour la licence actuelle.
           </span>
         </li>
 
         <li>
-          <strong data-i18n="guideStep3Title">Change de portée</strong>
+          <strong data-i18n="guideStep3Title">Classe ton top</strong>
           <span data-i18n="guideStep3Text">
-            Fais un classement général ou un classement indépendant pour une licence.
+            Fais glisser les cartes ou saisis directement leur numéro.
           </span>
         </li>
 
@@ -228,7 +218,7 @@
         <li>
           <strong data-i18n="guideStep5Title">Prévisualise et exporte</strong>
           <span data-i18n="guideStep5Text">
-            L'export est toujours généré en 1920×1080, même depuis un téléphone.
+            L'aperçu final montre exactement le rendu exporté, y compris depuis un téléphone.
           </span>
         </li>
       </ol>
@@ -241,13 +231,11 @@
     <section class="modal-card preview-card" role="dialog" aria-modal="true" aria-labelledby="preview-title">
       <button class="modal-close" type="button" data-close-modal="preview" aria-label="Fermer">×</button>
 
-      <h2 id="preview-title" data-i18n="previewTitle">Aperçu de l'export</h2>
+      <h2 id="preview-title" data-i18n="finalPreview">Aperçu final</h2>
 
-      <div id="preview-loading" class="preview-loading" data-i18n="generatingPreview">
-        Génération de l'aperçu...
+      <div id="preview-viewport" class="preview-viewport">
+        <div id="preview-mount" class="preview-mount"></div>
       </div>
-
-      <img id="preview-image" class="preview-image" alt="Aperçu 1920×1080" />
     </section>
   </div>
 
