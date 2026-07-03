@@ -30,21 +30,28 @@ const translations = {
     rankedCount: "{ranked} classé(s) sur {total}",
 
     guideTitle: "Comment utiliser JRPGTop",
-    guideStep1Title: "Choisis le type de classement",
-    guideStep1Text:
-      "Le menu de droite permet de classer toutes les licences, tous les jeux ou seulement les jeux d'une licence.",
+    guideStep1Title: "Choisis le classement",
+    guideStep1Start: "Dans le menu de droite, choisis",
+    guideStep1Or: "ou",
+    guideStep1End: "ou sélectionne directement une licence.",
+
     guideStep2Title: "Choisis le thème",
-    guideStep2Text:
-      "Pour une licence précise, le menu de gauche affiche ses thèmes. Pour Toutes les licences et Tous les jeux, il affiche tous les thèmes du catalogue.",
+    guideStep2Start: "Dans le menu de gauche, utilise",
+    guideStep2End:
+      "pour choisir le fond et les couleurs du classement.",
+
     guideStep3Title: "Classe ton top",
     guideStep3Text:
-      "Fais glisser les cartes ou saisis directement leur numéro.",
-    guideStep4Title: "Finalise",
-    guideStep4Text:
-      "Le mode final masque les éléments non classés et centre uniquement le top utilisé.",
-    guideStep5Title: "Prévisualise et exporte",
-    guideStep5Text:
-      "L'aperçu final montre exactement le rendu exporté, y compris depuis un téléphone.",
+      "Fais glisser les cartes ou saisis directement leur numéro de classement.",
+
+    guideStep4Title: "Finalise et exporte",
+    guideStep4Start: "Utilise",
+    guideStep4AfterFinalize:
+      "pour masquer les éléments non classés. Ouvre",
+    guideStep4BeforeExport: "puis choisis",
+    guideStep4End: "pour enregistrer l’image.",
+
+    understood: "Compris",
 
     confirmFinalize:
       "Finaliser ce top ? Les éléments non classés seront masqués.",
@@ -88,21 +95,28 @@ const translations = {
     rankedCount: "{ranked} ranked out of {total}",
 
     guideTitle: "How to use JRPGTop",
-    guideStep1Title: "Choose the ranking type",
-    guideStep1Text:
-      "The right menu lets you rank all licences, all games, or only the games from one licence.",
+    guideStep1Title: "Choose the ranking",
+    guideStep1Start: "In the right menu, choose",
+    guideStep1Or: "or",
+    guideStep1End: "or select a specific licence.",
+
     guideStep2Title: "Choose the theme",
-    guideStep2Text:
-      "For one specific licence, the left menu shows its themes. For All licences and All games, it shows every theme in the catalog.",
+    guideStep2Start: "In the left menu, use",
+    guideStep2End:
+      "to choose the ranking background and colors.",
+
     guideStep3Title: "Rank your top",
     guideStep3Text:
-      "Drag cards or directly enter their rank number.",
-    guideStep4Title: "Finalize",
-    guideStep4Text:
-      "Final mode hides unranked items and centers only the used ranking.",
-    guideStep5Title: "Preview and export",
-    guideStep5Text:
-      "Final preview shows the exact exported result, including on a phone.",
+      "Drag the cards or directly enter their ranking number.",
+
+    guideStep4Title: "Finalize and export",
+    guideStep4Start: "Use",
+    guideStep4AfterFinalize:
+      "to hide unranked items. Open",
+    guideStep4BeforeExport: "then choose",
+    guideStep4End: "to save the image.",
+
+    understood: "Got it",
 
     confirmFinalize:
       "Finalize this top? Unranked items will be hidden.",
