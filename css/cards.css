@@ -195,8 +195,16 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--accent) 34%, transparent), rgba(10, 14, 40, 0.42)),
-    linear-gradient(180deg, rgba(7, 10, 24, 0.95), rgba(3, 5, 14, 0.95));
+    radial-gradient(
+      circle at 30% 10%,
+      color-mix(in srgb, var(--accent) 34%, transparent),
+      rgba(10, 14, 40, 0.42)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 10, 24, 0.95),
+      rgba(3, 5, 14, 0.95)
+    );
 }
 
 .spoiler-inner {
@@ -214,6 +222,8 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.58));
   pointer-events: none;
 }
+
+/* Export PNG */
 
 .export-card {
   position: relative;
@@ -250,13 +260,12 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   line-height: 1;
 }
 
-.export-card-rank > span {
+.export-card-rank-text {
   position: relative;
   top: -2px;
   display: block;
   line-height: 1;
 }
-
 
 .export-card-title {
   position: absolute;
@@ -298,8 +307,16 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   place-items: center;
   padding: 20px;
   background:
-    radial-gradient(circle at 30% 10%, rgba(255, 211, 105, 0.22), rgba(10, 14, 40, 0.44)),
-    linear-gradient(180deg, rgba(7, 10, 24, 0.96), rgba(3, 5, 14, 0.96));
+    radial-gradient(
+      circle at 30% 10%,
+      rgba(255, 211, 105, 0.22),
+      rgba(10, 14, 40, 0.44)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 10, 24, 0.96),
+      rgba(3, 5, 14, 0.96)
+    );
 }
 
 .export-card-spoiler img {
