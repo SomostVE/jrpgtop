@@ -10,6 +10,10 @@ import { t } from "./i18n.js";
 
 const listRoot = document.getElementById("licence-list");
 const rightMenu = document.getElementById("right-menu");
+const searchInput = document.getElementById("licence-search");
+const clearSearchButton = document.getElementById("licence-search-clear");
+
+let searchQuery = "";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -18,6 +22,24 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function normalizeSearch(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase()
+    .trim();
+}
+
+function syncSearchControls() {
+  if (searchInput && searchInput.value !== searchQuery) {
+    searchInput.value = searchQuery;
+  }
+
+  if (clearSearchButton) {
+    clearSearchButton.hidden = searchQuery.length === 0;
+  }
 }
 
 function specialEntry({
@@ -55,6 +77,39 @@ function specialEntry({
   `;
 }
 
+function licenseEntry(license, index, state) {
+  const count = getItemsForLicense(license.id).length;
+
+  return `
+    <button
+      class="licence-entry ${state.rankingScope === license.id ? "active" : ""}"
+      type="button"
+      data-ranking-scope="${escapeHtml(license.id)}"
+      data-license-id="${escapeHtml(license.id)}"
+      style="
+        --entry-accent:${escapeHtml(license.accent || "#d83d91")};
+        --entry-offset:${Math.min((index + 2) * 9, 45)}px;
+      "
+    >
+      <img
+        class="licence-entry-image"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+        src="${escapeHtml(license.menuImage || license.background || "")}"
+        alt=""
+      />
+
+      <span class="licence-entry-text">
+        <span class="licence-entry-name">${escapeHtml(license.name)}</span>
+
+        <span class="licence-entry-count">
+          ${escapeHtml(t("gameCount", { count }))}
+        </span>
+      </span>
+    </button>
+  `;
+}
+
 export function renderLicenseMenu() {
   const state = getState();
   const catalog = getCatalog();
@@ -70,6 +125,7 @@ export function renderLicenseMenu() {
       active: state.rankingScope === SCOPE_ALL_LICENSES,
       index: 0
     }),
+
     specialEntry({
       scopeId: SCOPE_ALL_GAMES,
       title: t("allGames"),
@@ -81,44 +137,65 @@ export function renderLicenseMenu() {
     })
   ].join("");
 
-  const licenseEntries = catalog.licenses
-    .map((license, index) => {
-      const count = getItemsForLicense(license.id).length;
+  const normalizedQuery = normalizeSearch(searchQuery);
 
-      return `
-        <button
-          class="licence-entry ${state.rankingScope === license.id ? "active" : ""}"
-          type="button"
-          data-ranking-scope="${escapeHtml(license.id)}"
-          data-license-id="${escapeHtml(license.id)}"
-          style="
-            --entry-accent:${escapeHtml(license.accent || "#d83d91")};
-            --entry-offset:${Math.min((index + 2) * 9, 45)}px;
-          "
-        >
-          <img
-            class="licence-entry-image"
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-            src="${escapeHtml(license.menuImage || license.background || "")}" 
-            alt=""
-          />
+  const filteredLicenses = normalizedQuery
+    ? catalog.licenses.filter(license =>
+        normalizeSearch(license.name).includes(normalizedQuery)
+      )
+    : catalog.licenses;
 
-          <span class="licence-entry-text">
-            <span class="licence-entry-name">${escapeHtml(license.name)}</span>
-            <span class="licence-entry-count">
-              ${escapeHtml(t("gameCount", { count }))}
-            </span>
-          </span>
-        </button>
-      `;
-    })
+  const licenseEntries = filteredLicenses
+    .map((license, index) => licenseEntry(license, index, state))
     .join("");
 
-  listRoot.innerHTML = globalEntries + licenseEntries;
+  const emptyMessage =
+    normalizedQuery && filteredLicenses.length === 0
+      ? `
+        <div class="licence-empty" role="status">
+          <strong>${escapeHtml(t("noLicenseFound"))}</strong>
+          <span>${escapeHtml(t("tryAnotherSearch"))}</span>
+        </div>
+      `
+      : "";
+
+  listRoot.innerHTML = `
+    <div class="licence-global-list">
+      ${globalEntries}
+    </div>
+
+    <div class="licence-results-list">
+      ${licenseEntries}
+      ${emptyMessage}
+    </div>
+  `;
+
+  syncSearchControls();
 }
 
 export function initLicenseMenu() {
+  searchInput?.addEventListener("input", () => {
+    searchQuery = searchInput.value;
+    renderLicenseMenu();
+  });
+
+  searchInput?.addEventListener("keydown", event => {
+    if (event.key !== "Escape" || searchQuery.length === 0) {
+      return;
+    }
+
+    event.stopPropagation();
+    searchQuery = "";
+    renderLicenseMenu();
+    searchInput.focus();
+  });
+
+  clearSearchButton?.addEventListener("click", () => {
+    searchQuery = "";
+    renderLicenseMenu();
+    searchInput?.focus();
+  });
+
   listRoot.addEventListener("click", event => {
     const button = event.target.closest("[data-ranking-scope]");
 
@@ -140,7 +217,11 @@ export function initLicenseMenu() {
       }
     });
 
+    searchQuery = "";
+    syncSearchControls();
+
     rightMenu.classList.remove("open");
+
     document
       .getElementById("licence-drawer")
       .setAttribute("aria-hidden", "true");

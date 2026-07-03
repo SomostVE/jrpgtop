@@ -24,6 +24,11 @@ const translations = {
     allGames: "Tous les jeux",
     licenseCount: "{count} licence(s)",
     gameCount: "{count} jeu(x)",
+    searchLicensePlaceholder: "Rechercher une licence...",
+    clearSearch: "Effacer la recherche",
+    noLicenseFound: "Aucune licence trouvée",
+    tryAnotherSearch: "Essaie une autre recherche.",
+    requestContent: "Proposer un ajout",
 
     unranked: "NON CLASSÉ(S)",
     noCover: "PAS D'IMAGE",
@@ -89,6 +94,11 @@ const translations = {
     allGames: "All games",
     licenseCount: "{count} licence(s)",
     gameCount: "{count} game(s)",
+    searchLicensePlaceholder: "Search for a licence...",
+    clearSearch: "Clear search",
+    noLicenseFound: "No licence found",
+    tryAnotherSearch: "Try another search.",
+    requestContent: "Request content",
 
     unranked: "UNRANKED",
     noCover: "NO COVER",
@@ -156,5 +166,15 @@ export function applyTranslations(root = document) {
   root.querySelectorAll("[data-i18n]").forEach(element => {
     const key = element.dataset.i18n;
     element.textContent = t(key);
+  });
+
+  root.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+    const key = element.dataset.i18nPlaceholder;
+    element.setAttribute("placeholder", t(key));
+  });
+
+  root.querySelectorAll("[data-i18n-aria-label]").forEach(element => {
+    const key = element.dataset.i18nAriaLabel;
+    element.setAttribute("aria-label", t(key));
   });
 }
