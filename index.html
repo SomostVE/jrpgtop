@@ -123,7 +123,7 @@
         </select>
       </label>
 
-      <label class="panel-row">
+      <label id="theme-row" class="panel-row">
         <span data-i18n="theme">Thème</span>
         <select id="theme-select" class="select"></select>
       </label>
@@ -160,15 +160,15 @@
   </aside>
 
   <aside id="right-menu" class="licence-drawer-wrap" data-ignore-export="true">
-    <button id="right-handle" class="side-handle licence-handle" type="button" aria-label="Licences">☰</button>
+    <button id="right-handle" class="side-handle licence-handle" type="button" aria-label="Classements">☰</button>
 
     <div id="licence-drawer-backdrop" class="licence-drawer-backdrop"></div>
 
     <section id="licence-drawer" class="licence-drawer" aria-hidden="true">
       <header class="licence-drawer-header">
         <div>
-          <div class="side-caption" data-i18n="licenses">LICENCES</div>
-          <h2 data-i18n="chooseLicense">Choisir une licence</h2>
+          <div class="side-caption" data-i18n="licenses">CLASSEMENTS</div>
+          <h2 data-i18n="chooseRanking">Choisir un classement</h2>
         </div>
 
         <button id="right-close" class="drawer-close" type="button" aria-label="Fermer">×</button>
@@ -188,16 +188,16 @@
 
       <ol class="guide-steps">
         <li>
-          <strong data-i18n="guideStep1Title">Choisis une licence</strong>
+          <strong data-i18n="guideStep1Title">Choisis le type de classement</strong>
           <span data-i18n="guideStep1Text">
-            Ouvre le menu de droite. Tous les jeux de la licence choisie sont chargés automatiquement.
+            Le menu de droite permet de classer toutes les licences, tous les jeux ou seulement les jeux d'une licence.
           </span>
         </li>
 
         <li>
           <strong data-i18n="guideStep2Title">Choisis le thème</strong>
           <span data-i18n="guideStep2Text">
-            Le menu de gauche propose uniquement les thèmes disponibles pour la licence actuelle.
+            Pour une licence précise, le menu de gauche propose uniquement ses thèmes disponibles.
           </span>
         </li>
 
@@ -211,7 +211,7 @@
         <li>
           <strong data-i18n="guideStep4Title">Finalise</strong>
           <span data-i18n="guideStep4Text">
-            Le mode final masque les jeux non classés et centre uniquement le top utilisé.
+            Le mode final masque les éléments non classés et centre uniquement le top utilisé.
           </span>
         </li>
 
