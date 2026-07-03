@@ -57,13 +57,14 @@
               "type": "original",
               "title": "Trails in the Sky FC",
               "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Trails_in_the_Sky_artwork.jpg/250px-Trails_in_the_Sky_artwork.jpg"
+              "logo": "assets/logos/trails/sky-fc.png"
             },
             {
               "id": "remake",
               "label": "Remake",
               "type": "remake",
               "title": "Trails in the Sky 1st Chapter",
-              "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Trails_in_the_Sky_artwork.jpg/250px-Trails_in_the_Sky_artwork.jpg",
+              "cover": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Trails_in_the_Sky_1st_Chapter_artwork.png/250px-Trails_in_the_Sky_1st_Chapter_artwork.png",
               "defaultSelected": true,
               "defaultRank": 1
             }
