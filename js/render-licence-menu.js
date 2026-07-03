@@ -6,7 +6,7 @@ import {
   SCOPE_ALL_LICENSES
 } from "./data-loader.js";
 import { getState, updateState } from "./state.js";
-import { t } from "./i18n.js";
+import { getLanguage, t } from "./i18n.js";
 
 const listRoot = document.getElementById("licence-list");
 const rightMenu = document.getElementById("right-menu");
@@ -32,6 +32,26 @@ function normalizeSearch(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase()
     .trim();
+}
+
+function getLicenseName(license) {
+  if (getLanguage() === "en") {
+    return license.nameEn || license.name;
+  }
+
+  return license.name;
+}
+
+function matchesLicenseSearch(license, query) {
+  const localizedName = normalizeSearch(getLicenseName(license));
+  const frenchName = normalizeSearch(license.name);
+  const englishName = normalizeSearch(license.nameEn);
+
+  return (
+    localizedName.includes(query) ||
+    frenchName.includes(query) ||
+    englishName.includes(query)
+  );
 }
 
 function syncSearchControls() {
@@ -139,6 +159,7 @@ function specialEntry({
 
 function licenseEntry(license, index, state) {
   const count = getItemsForLicense(license.id).length;
+  const licenseName = getLicenseName(license);
 
   return `
     <button
@@ -174,7 +195,7 @@ function licenseEntry(license, index, state) {
 
       <span class="licence-entry-text">
         <span class="licence-entry-name">
-          ${escapeHtml(license.name)}
+          ${escapeHtml(licenseName)}
         </span>
 
         <span class="licence-entry-count">
@@ -235,9 +256,10 @@ export function renderLicenseMenu() {
   const filteredLicenses =
     normalizedQuery
       ? catalog.licenses.filter(license =>
-          normalizeSearch(
-            license.name
-          ).includes(normalizedQuery)
+          matchesLicenseSearch(
+            license,
+            normalizedQuery
+          )
         )
       : catalog.licenses;
 
@@ -267,10 +289,6 @@ export function renderLicenseMenu() {
       `
       : "";
 
-  /*
-   * Une seule liste continue :
-   * les classements globaux puis les licences.
-   */
   listRoot.innerHTML =
     globalEntries +
     licenseEntries +
@@ -361,10 +379,6 @@ export function initLicenseMenu() {
     }
   );
 
-  /*
-   * À chaque ouverture, l'entrée sélectionnée est
-   * automatiquement replacée au milieu de la liste.
-   */
   const drawerObserver =
     new MutationObserver(() => {
       const isOpen =
