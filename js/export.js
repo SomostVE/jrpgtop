@@ -57,24 +57,118 @@ async function waitForImages(root) {
   );
 }
 
+/**
+ * Récupère la position et le style de chaque numéro avant la capture.
+ * Les coordonnées sont calculées relativement à la scène 1920 × 1080.
+ */
+function getExportRankLabels() {
+  const stageRect = exportStage.getBoundingClientRect();
+
+  return [...exportStage.querySelectorAll(".export-card-rank")].map(badge => {
+    const rect = badge.getBoundingClientRect();
+    const label =
+      badge.querySelector(".export-card-rank-text") ||
+      badge;
+
+    const style = window.getComputedStyle(label);
+
+    return {
+      text: badge.textContent.trim(),
+
+      x:
+        rect.left -
+        stageRect.left +
+        rect.width / 2,
+
+      y:
+        rect.top -
+        stageRect.top +
+        rect.height / 2,
+
+      color: style.color,
+      fontSize: Number.parseFloat(style.fontSize) || 15,
+      fontWeight: style.fontWeight || "900",
+      fontFamily: style.fontFamily || "sans-serif"
+    };
+  });
+}
+
+/**
+ * Redessine les numéros sur le Canvas après html2canvas.
+ * Cela évite le mauvais alignement vertical produit par html2canvas.
+ */
+function drawRankLabels(canvas, labels) {
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    throw new Error("Impossible d'obtenir le contexte 2D du Canvas.");
+  }
+
+  context.save();
+
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+
+  for (const label of labels) {
+    context.font =
+      `${label.fontWeight} ${label.fontSize}px ${label.fontFamily}`;
+
+    context.fillStyle = label.color;
+
+    context.fillText(
+      label.text,
+      label.x,
+      label.y
+    );
+  }
+
+  context.restore();
+}
+
 async function captureExportCanvas() {
   if (!window.html2canvas) {
     throw new Error("html2canvas n'est pas chargé.");
   }
 
+  if (document.fonts?.ready) {
+    try {
+      await document.fonts.ready;
+    } catch {}
+  }
+
   await waitForImages(exportStage);
 
-  return window.html2canvas(exportStage, {
+  const rankLabels = getExportRankLabels();
+
+  const canvas = await window.html2canvas(exportStage, {
     backgroundColor: "#070a1b",
     useCORS: true,
     allowTaint: false,
     logging: false,
+
     width: 1920,
     height: 1080,
     scale: 1,
+
     scrollX: 0,
-    scrollY: 0
+    scrollY: 0,
+
+    onclone: clonedDocument => {
+      /*
+       * On garde les capsules sombres, mais on masque leur texte
+       * dans la copie utilisée par html2canvas.
+       */
+      clonedDocument
+        .querySelectorAll(".export-card-rank-text")
+        .forEach(label => {
+          label.style.visibility = "hidden";
+        });
+    }
   });
+
+  drawRankLabels(canvas, rankLabels);
+
+  return canvas;
 }
 
 function getFileName() {
@@ -87,7 +181,9 @@ function getFileName() {
   } else if (state.rankingScope === SCOPE_ALL_GAMES) {
     rawName = t("allGames");
   } else {
-    rawName = getLicenseById(state.rankingScope)?.name || rawName;
+    rawName =
+      getLicenseById(state.rankingScope)?.name ||
+      rawName;
   }
 
   const safeName = rawName
@@ -101,7 +197,10 @@ function getFileName() {
 
 function fitPreview() {
   const stage = previewMount.firstElementChild;
-  if (!stage) return;
+
+  if (!stage) {
+    return;
+  }
 
   const width = previewViewport.clientWidth;
   const scale = width / 1920;
@@ -122,7 +221,10 @@ export async function exportTop() {
 
     link.download = getFileName();
     link.href = canvas.toDataURL("image/png");
+
+    document.body.appendChild(link);
     link.click();
+    link.remove();
   } catch (error) {
     console.error("Export failed:", error);
     window.alert(t("exportFailed"));
@@ -135,9 +237,19 @@ export function openPreview() {
     return;
   }
 
+  if (previewResizeHandler) {
+    window.removeEventListener(
+      "resize",
+      previewResizeHandler
+    );
+
+    previewResizeHandler = null;
+  }
+
   previewMount.innerHTML = "";
 
   const clone = exportStage.cloneNode(true);
+
   clone.removeAttribute("id");
   clone.classList.remove("export-stage");
   clone.classList.add("preview-stage");
@@ -148,8 +260,12 @@ export function openPreview() {
 
   window.requestAnimationFrame(fitPreview);
 
-  previewResizeHandler = () => fitPreview();
-  window.addEventListener("resize", previewResizeHandler);
+  previewResizeHandler = fitPreview;
+
+  window.addEventListener(
+    "resize",
+    previewResizeHandler
+  );
 }
 
 export function closePreview() {
@@ -157,7 +273,11 @@ export function closePreview() {
   previewMount.innerHTML = "";
 
   if (previewResizeHandler) {
-    window.removeEventListener("resize", previewResizeHandler);
+    window.removeEventListener(
+      "resize",
+      previewResizeHandler
+    );
+
     previewResizeHandler = null;
   }
 }
