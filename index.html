@@ -262,7 +262,59 @@
         </button>
       </header>
 
+      <div class="licence-search-area">
+        <label class="licence-search-box" for="licence-search">
+          <svg
+            class="licence-search-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+
+          <input
+            id="licence-search"
+            class="licence-search-input"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            data-i18n-placeholder="searchLicensePlaceholder"
+            data-i18n-aria-label="searchLicensePlaceholder"
+            placeholder="Rechercher une licence..."
+          />
+
+          <button
+            id="licence-search-clear"
+            class="licence-search-clear"
+            type="button"
+            data-i18n-aria-label="clearSearch"
+            aria-label="Effacer la recherche"
+            hidden
+          >
+            ×
+          </button>
+        </label>
+      </div>
+
       <div id="licence-list" class="licence-list"></div>
+
+      <footer class="licence-drawer-footer">
+        <a
+          class="request-content-button"
+          href="https://github.com/SomostVE/jrpgtop/issues/new?template=03-add-content.yml"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-i18n="requestContent"
+        >
+          Proposer un ajout
+        </a>
+      </footer>
     </section>
   </aside>
 
