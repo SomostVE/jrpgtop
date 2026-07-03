@@ -64,13 +64,13 @@ async function waitForImages(root) {
 function getExportRankLabels() {
   const stageRect = exportStage.getBoundingClientRect();
 
+  const accent =
+    exportStage.style
+      .getPropertyValue("--export-accent")
+      .trim() || "#ffd369";
+
   return [...exportStage.querySelectorAll(".export-card-rank")].map(badge => {
     const rect = badge.getBoundingClientRect();
-    const label =
-      badge.querySelector(".export-card-rank-text") ||
-      badge;
-
-    const style = window.getComputedStyle(label);
 
     return {
       text: badge.textContent.trim(),
@@ -83,12 +83,13 @@ function getExportRankLabels() {
       y:
         rect.top -
         stageRect.top +
-        rect.height / 2,
+        rect.height / 2 -
+        1,
 
-      color: style.color,
-      fontSize: Number.parseFloat(style.fontSize) || 15,
-      fontWeight: style.fontWeight || "900",
-      fontFamily: style.fontFamily || "sans-serif"
+      color: accent,
+      fontSize: 15,
+      fontWeight: "900",
+      fontFamily: '"Segoe UI", Arial, sans-serif'
     };
   });
 }
@@ -105,7 +106,6 @@ function drawRankLabels(canvas, labels) {
   }
 
   context.save();
-
   context.textAlign = "center";
   context.textBaseline = "middle";
 
