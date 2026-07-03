@@ -1,9 +1,11 @@
 import {
   getActiveItems,
-  getActiveLicense,
   getActiveTheme,
   getCatalog,
-  getItemByKey
+  getItemByKey,
+  getLicenseById,
+  SCOPE_ALL_GAMES,
+  SCOPE_ALL_LICENSES
 } from "./data-loader.js";
 import { getState } from "./state.js";
 import { t } from "./i18n.js";
@@ -131,31 +133,44 @@ function bindImageFallbacks(root) {
   });
 }
 
-export function getRankedKeysForCurrentLicense() {
+export function getCurrentScopeTitle() {
   const state = getState();
-  const license = getActiveLicense(state);
 
-  if (!license) return [];
+  if (state.rankingScope === SCOPE_ALL_LICENSES) {
+    return t("allLicenses");
+  }
 
+  if (state.rankingScope === SCOPE_ALL_GAMES) {
+    return t("allGames");
+  }
+
+  return getLicenseById(state.rankingScope)?.name || "JRPGTop";
+}
+
+export function getRankedKeysForCurrentScope() {
+  const state = getState();
   const available = new Set(getActiveItems(state).map(item => item.key));
-  const order = state.rankings[license.id] || [];
+  const order = state.rankings[state.rankingScope] || [];
 
   return order.filter(key => available.has(key));
 }
 
-export function getRankedItemsForCurrentLicense() {
-  return getRankedKeysForCurrentLicense()
+export function getRankedItemsForCurrentScope() {
+  return getRankedKeysForCurrentScope()
     .map(key => getItemByKey(key))
     .filter(Boolean);
 }
 
+// Alias conservés pour les anciens imports.
+export const getRankedKeysForCurrentLicense = getRankedKeysForCurrentScope;
+export const getRankedItemsForCurrentLicense = getRankedItemsForCurrentScope;
+
 export function renderGrid() {
   const state = getState();
-  const license = getActiveLicense(state);
   const items = getActiveItems(state);
   const itemMap = new Map(items.map(item => [item.key, item]));
 
-  const rankedKeys = getRankedKeysForCurrentLicense();
+  const rankedKeys = getRankedKeysForCurrentScope();
   const rankedSet = new Set(rankedKeys);
 
   const rankedItems = rankedKeys
@@ -197,7 +212,7 @@ export function renderGrid() {
   app.classList.toggle("unranked-empty", unrankedItems.length === 0);
   app.classList.toggle("finalized", state.finalized);
 
-  scopeTitle.textContent = license?.name || "JRPGTop";
+  scopeTitle.textContent = getCurrentScopeTitle();
 
   rankingSummary.textContent = t("rankedCount", {
     ranked: rankedItems.length,
@@ -301,10 +316,10 @@ function exportCardHtml(item, rank, state) {
 
 export function renderExportScene() {
   const state = getState();
-  const license = getActiveLicense(state);
   const theme = getActiveTheme(state);
-  const rankedItems = getRankedItemsForCurrentLicense();
+  const rankedItems = getRankedItemsForCurrentScope();
   const layout = calculateExportLayout(rankedItems.length);
+  const total = getActiveItems(state).length;
 
   exportStage.style.setProperty(
     "--export-accent",
@@ -327,13 +342,13 @@ export function renderExportScene() {
       <header class="export-header">
         <div>
           <div class="export-brand">JRPGTop</div>
-          <div class="export-title">${escapeHtml(license?.name || "JRPGTop")}</div>
+          <div class="export-title">${escapeHtml(getCurrentScopeTitle())}</div>
         </div>
 
         <div class="export-count">
           ${escapeHtml(t("rankedCount", {
             ranked: rankedItems.length,
-            total: getActiveItems(state).length
+            total
           }))}
         </div>
       </header>

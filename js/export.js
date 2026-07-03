@@ -1,7 +1,14 @@
-import { getActiveLicense } from "./data-loader.js";
+import {
+  getLicenseById,
+  SCOPE_ALL_GAMES,
+  SCOPE_ALL_LICENSES
+} from "./data-loader.js";
 import { getState } from "./state.js";
 import { t } from "./i18n.js";
-import { getRankedItemsForCurrentLicense } from "./render-grid.js";
+import {
+  getCurrentScopeTitle,
+  getRankedItemsForCurrentScope
+} from "./render-grid.js";
 
 const exportStage = document.getElementById("export-stage");
 const previewModal = document.getElementById("preview-modal");
@@ -72,9 +79,18 @@ async function captureExportCanvas() {
 
 function getFileName() {
   const state = getState();
-  const license = getActiveLicense(state);
 
-  const safeName = (license?.name || "Ranking")
+  let rawName = getCurrentScopeTitle();
+
+  if (state.rankingScope === SCOPE_ALL_LICENSES) {
+    rawName = t("allLicenses");
+  } else if (state.rankingScope === SCOPE_ALL_GAMES) {
+    rawName = t("allGames");
+  } else {
+    rawName = getLicenseById(state.rankingScope)?.name || rawName;
+  }
+
+  const safeName = rawName
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9_-]+/g, "-")
@@ -95,7 +111,7 @@ function fitPreview() {
 }
 
 export async function exportTop() {
-  if (getRankedItemsForCurrentLicense().length === 0) {
+  if (getRankedItemsForCurrentScope().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }
@@ -114,7 +130,7 @@ export async function exportTop() {
 }
 
 export function openPreview() {
-  if (getRankedItemsForCurrentLicense().length === 0) {
+  if (getRankedItemsForCurrentScope().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }

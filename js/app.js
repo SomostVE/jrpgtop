@@ -3,7 +3,12 @@ import {
   getAllItems,
   getCatalog,
   getItemsForLicense,
-  loadCatalog
+  getLicenseById,
+  getLicenseRankingItems,
+  isGlobalRankingScope,
+  loadCatalog,
+  SCOPE_ALL_GAMES,
+  SCOPE_ALL_LICENSES
 } from "./data-loader.js";
 import { applyTranslations, setLanguage, t } from "./i18n.js";
 import { closePreview, exportTop, openPreview } from "./export.js";
@@ -34,6 +39,7 @@ const sideLanguage = document.getElementById("side-language");
 const sideSpoiler = document.getElementById("side-spoiler");
 const sideHideTitles = document.getElementById("side-hide-titles");
 const sideHideTitlesRow = document.getElementById("side-hide-titles-row");
+const themeRow = document.getElementById("theme-row");
 const themeSelect = document.getElementById("theme-select");
 
 const finalizeButton = document.getElementById("btn-finalize");
@@ -78,12 +84,34 @@ function initializeDefaults() {
   const catalog = getCatalog();
   const validLicenseIds = new Set(catalog.licenses.map(license => license.id));
   const validItemKeys = new Set(getAllItems().map(item => item.key));
+  const validLicenseItemKeys = new Set(
+    getLicenseRankingItems().map(item => item.key)
+  );
+  const validScopes = new Set([
+    SCOPE_ALL_LICENSES,
+    SCOPE_ALL_GAMES,
+    ...validLicenseIds
+  ]);
 
   updateState(
     draft => {
       if (!validLicenseIds.has(draft.activeLicenseId)) {
         draft.activeLicenseId = catalog.licenses[0]?.id || "";
       }
+
+      if (!validScopes.has(draft.rankingScope)) {
+        draft.rankingScope = validLicenseIds.has(draft.activeLicenseId)
+          ? draft.activeLicenseId
+          : SCOPE_ALL_LICENSES;
+      }
+
+      draft.rankings[SCOPE_ALL_LICENSES] = (
+        draft.rankings[SCOPE_ALL_LICENSES] || []
+      ).filter(key => validLicenseItemKeys.has(key));
+
+      draft.rankings[SCOPE_ALL_GAMES] = (
+        draft.rankings[SCOPE_ALL_GAMES] || []
+      ).filter(key => validItemKeys.has(key));
 
       for (const license of catalog.licenses) {
         const available = new Set(
@@ -115,6 +143,8 @@ function initializeDefaults() {
           draft.rankings[license.id] = defaultOrder;
         }
 
+        draft.rankings[SCOPE_ALL_LICENSES] = [];
+        draft.rankings[SCOPE_ALL_GAMES] = [];
         draft.initialized = true;
       }
     },
@@ -126,7 +156,19 @@ function initializeDefaults() {
 
 function populateThemeSelect() {
   const state = getState();
-  const license = getActiveLicense(state);
+  const globalScope = isGlobalRankingScope(state.rankingScope);
+
+  themeRow?.classList.toggle("disabled-row", globalScope);
+
+  if (globalScope) {
+    themeSelect.innerHTML = `<option value="">${t("notAvailable")}</option>`;
+    themeSelect.disabled = true;
+    return;
+  }
+
+  const license =
+    getLicenseById(state.rankingScope) ||
+    getActiveLicense(state);
   const themes = license?.themes || [];
 
   themeSelect.innerHTML = themes
@@ -255,7 +297,16 @@ function bindSideControls() {
   });
 
   themeSelect.addEventListener("change", () => {
-    const license = getActiveLicense(getState());
+    const state = getState();
+
+    if (isGlobalRankingScope(state.rankingScope)) {
+      return;
+    }
+
+    const license =
+      getLicenseById(state.rankingScope) ||
+      getActiveLicense(state);
+
     if (!license) return;
 
     updateState(draft => {

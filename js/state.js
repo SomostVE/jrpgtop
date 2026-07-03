@@ -1,7 +1,7 @@
 const STORAGE_KEY = "jrpgtop-state-v2";
 
 const DEFAULT_STATE = {
-  version: 2,
+  version: 3,
   initialized: false,
 
   lang: "fr",
@@ -9,6 +9,7 @@ const DEFAULT_STATE = {
   hideTitles: false,
   finalized: false,
 
+  rankingScope: "all-licenses",
   activeLicenseId: "",
   selectedThemeByLicense: {},
   rankings: {}
@@ -26,10 +27,17 @@ function clone(value) {
 }
 
 function normalizeState(candidate) {
+  const hasRankingScope =
+    candidate && typeof candidate.rankingScope === "string";
+
   const next = {
     ...clone(DEFAULT_STATE),
     ...(candidate && typeof candidate === "object" ? candidate : {})
   };
+
+  if (!hasRankingScope) {
+    next.rankingScope = next.activeLicenseId || "all-licenses";
+  }
 
   next.selectedThemeByLicense =
     next.selectedThemeByLicense && typeof next.selectedThemeByLicense === "object"
@@ -41,20 +49,25 @@ function normalizeState(candidate) {
       ? next.rankings
       : {};
 
-  for (const [licenseId, order] of Object.entries(next.rankings)) {
-    next.rankings[licenseId] = Array.isArray(order)
+  for (const [scopeId, order] of Object.entries(next.rankings)) {
+    next.rankings[scopeId] = Array.isArray(order)
       ? [...new Set(order.filter(Boolean))]
       : [];
   }
 
-  if (!['fr', 'en'].includes(next.lang)) {
-    next.lang = 'fr';
+  if (!["fr", "en"].includes(next.lang)) {
+    next.lang = "fr";
   }
 
-  if (typeof next.activeLicenseId !== 'string') {
-    next.activeLicenseId = '';
+  if (typeof next.rankingScope !== "string" || !next.rankingScope) {
+    next.rankingScope = "all-licenses";
   }
 
+  if (typeof next.activeLicenseId !== "string") {
+    next.activeLicenseId = "";
+  }
+
+  next.version = 3;
   next.spoilerOn = Boolean(next.spoilerOn);
   next.hideTitles = Boolean(next.hideTitles);
   next.finalized = Boolean(next.finalized);

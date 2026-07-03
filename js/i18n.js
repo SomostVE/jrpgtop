@@ -10,6 +10,7 @@ const translations = {
     options: "OPTIONS",
     language: "Langue",
     theme: "Thème",
+    notAvailable: "—",
     antiSpoiler: "Anti-spoiler",
     finalPreview: "Aperçu final",
     guide: "Guide",
@@ -17,8 +18,11 @@ const translations = {
     finalizeTop: "Finaliser le top",
     editTop: "Revenir à l'édition",
 
-    licenses: "LICENCES",
-    chooseLicense: "Choisir une licence",
+    licenses: "CLASSEMENTS",
+    chooseRanking: "Choisir un classement",
+    allLicenses: "Toutes les licences",
+    allGames: "Tous les jeux",
+    licenseCount: "{count} licence(s)",
     gameCount: "{count} jeu(x)",
 
     unranked: "NON CLASSÉ(S)",
@@ -26,26 +30,26 @@ const translations = {
     rankedCount: "{ranked} classé(s) sur {total}",
 
     guideTitle: "Comment utiliser JRPGTop",
-    guideStep1Title: "Choisis une licence",
+    guideStep1Title: "Choisis le type de classement",
     guideStep1Text:
-      "Ouvre le menu de droite. Tous les jeux de la licence choisie sont chargés automatiquement.",
+      "Le menu de droite permet de classer toutes les licences, tous les jeux ou seulement les jeux d'une licence.",
     guideStep2Title: "Choisis le thème",
     guideStep2Text:
-      "Le menu de gauche propose uniquement les thèmes disponibles pour la licence actuelle.",
+      "Pour une licence précise, le menu de gauche propose uniquement ses thèmes disponibles.",
     guideStep3Title: "Classe ton top",
     guideStep3Text:
       "Fais glisser les cartes ou saisis directement leur numéro.",
     guideStep4Title: "Finalise",
     guideStep4Text:
-      "Le mode final masque les jeux non classés et centre uniquement le top utilisé.",
+      "Le mode final masque les éléments non classés et centre uniquement le top utilisé.",
     guideStep5Title: "Prévisualise et exporte",
     guideStep5Text:
       "L'aperçu final montre exactement le rendu exporté, y compris depuis un téléphone.",
 
     confirmFinalize:
-      "Finaliser ce top ? Les jeux non classés seront masqués.",
+      "Finaliser ce top ? Les éléments non classés seront masqués.",
     emptyTop:
-      "Classe au moins un jeu avant de finaliser ou d'exporter.",
+      "Classe au moins un élément avant de finaliser ou d'exporter.",
     exportFailed:
       "L'export a échoué. Vérifie la console du navigateur.",
 
@@ -64,6 +68,7 @@ const translations = {
     options: "OPTIONS",
     language: "Language",
     theme: "Theme",
+    notAvailable: "—",
     antiSpoiler: "Anti-spoiler",
     finalPreview: "Final preview",
     guide: "Guide",
@@ -71,8 +76,11 @@ const translations = {
     finalizeTop: "Finalize top",
     editTop: "Return to editing",
 
-    licenses: "LICENCES",
-    chooseLicense: "Choose a licence",
+    licenses: "RANKINGS",
+    chooseRanking: "Choose a ranking",
+    allLicenses: "All licences",
+    allGames: "All games",
+    licenseCount: "{count} licence(s)",
     gameCount: "{count} game(s)",
 
     unranked: "UNRANKED",
@@ -80,26 +88,26 @@ const translations = {
     rankedCount: "{ranked} ranked out of {total}",
 
     guideTitle: "How to use JRPGTop",
-    guideStep1Title: "Choose a licence",
+    guideStep1Title: "Choose the ranking type",
     guideStep1Text:
-      "Open the right menu. Every game from the chosen licence is loaded automatically.",
+      "The right menu lets you rank all licences, all games, or only the games from one licence.",
     guideStep2Title: "Choose the theme",
     guideStep2Text:
-      "The left menu only shows themes available for the current licence.",
+      "For one specific licence, the left menu only shows its available themes.",
     guideStep3Title: "Rank your top",
     guideStep3Text:
       "Drag cards or directly enter their rank number.",
     guideStep4Title: "Finalize",
     guideStep4Text:
-      "Final mode hides unranked games and centers only the used ranking.",
+      "Final mode hides unranked items and centers only the used ranking.",
     guideStep5Title: "Preview and export",
     guideStep5Text:
       "Final preview shows the exact exported result, including on a phone.",
 
     confirmFinalize:
-      "Finalize this top? Unranked games will be hidden.",
+      "Finalize this top? Unranked items will be hidden.",
     emptyTop:
-      "Rank at least one game before finalizing or exporting.",
+      "Rank at least one item before finalizing or exporting.",
     exportFailed:
       "Export failed. Check the browser console.",
 

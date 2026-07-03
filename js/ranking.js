@@ -1,10 +1,7 @@
-import {
-  getActiveItems,
-  getActiveLicense
-} from "./data-loader.js";
+import { getActiveItems } from "./data-loader.js";
 import { getState, updateState } from "./state.js";
 import { t } from "./i18n.js";
-import { getRankedKeysForCurrentLicense } from "./render-grid.js";
+import { getRankedKeysForCurrentScope } from "./render-grid.js";
 
 const rankedGrid = document.getElementById("grid-ranked");
 const unrankedGrid = document.getElementById("grid-unranked");
@@ -22,9 +19,7 @@ function applyRankInput(input) {
   if (!card) return;
 
   const state = getState();
-  const license = getActiveLicense(state);
-  if (!license) return;
-
+  const scopeId = state.rankingScope;
   const itemKey = card.dataset.itemKey;
   const raw = String(input.value || "").replace(/[^\d]/g, "").slice(0, 3);
   const availableKeys = getAvailableKeys();
@@ -32,12 +27,12 @@ function applyRankInput(input) {
   if (!availableKeys.includes(itemKey)) return;
 
   updateState(draft => {
-    const currentOrder = (draft.rankings[license.id] || []).filter(
+    const currentOrder = (draft.rankings[scopeId] || []).filter(
       key => availableKeys.includes(key) && key !== itemKey
     );
 
     if (!raw) {
-      draft.rankings[license.id] = currentOrder;
+      draft.rankings[scopeId] = currentOrder;
       draft.finalized = false;
       return;
     }
@@ -47,16 +42,14 @@ function applyRankInput(input) {
 
     currentOrder.splice(index, 0, itemKey);
 
-    draft.rankings[license.id] = currentOrder;
+    draft.rankings[scopeId] = currentOrder;
     draft.finalized = false;
   });
 }
 
 function syncOrderFromDom() {
   const state = getState();
-  const license = getActiveLicense(state);
-  if (!license) return;
-
+  const scopeId = state.rankingScope;
   const available = new Set(getAvailableKeys());
 
   const rankedKeys = [...rankedGrid.children]
@@ -64,7 +57,7 @@ function syncOrderFromDom() {
     .filter(key => available.has(key));
 
   updateState(draft => {
-    draft.rankings[license.id] = rankedKeys;
+    draft.rankings[scopeId] = rankedKeys;
     draft.finalized = false;
   });
 }
@@ -113,7 +106,7 @@ export function toggleFinalize() {
     return;
   }
 
-  if (getRankedKeysForCurrentLicense().length === 0) {
+  if (getRankedKeysForCurrentScope().length === 0) {
     window.alert(t("emptyTop"));
     return;
   }
