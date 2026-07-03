@@ -249,22 +249,35 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   min-width: 43px;
   height: 24px;
   padding: 0 8px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.63);
   color: var(--export-accent, #ffd369);
-  font-size: 15px;
-  font-weight: 950;
-  line-height: 1;
 }
 
-.export-card-rank-text {
-  position: relative;
-  top: -2px;
+.export-card-rank::before {
+  content: "#";
   display: block;
-  line-height: 1;
+  height: 16px;
+  color: var(--export-accent, #ffd369);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 16px;
+  transform: translateY(-0.5px);
+}
+
+.export-card-rank-number {
+  display: block;
+  min-width: 10px;
+  height: 16px;
+  color: var(--export-accent, #ffd369);
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 16px;
+  transform: translateY(-0.5px);
 }
 
 .export-card-title {
