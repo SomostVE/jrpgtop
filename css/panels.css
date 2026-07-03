@@ -328,7 +328,6 @@ body.app-started .licence-drawer-wrap {
   gap: 10px;
   padding: 0 24px 0 40px;
   overscroll-behavior: contain;
-
   scrollbar-gutter: stable;
   scrollbar-color:
     color-mix(
