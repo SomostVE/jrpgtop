@@ -49,62 +49,6 @@
       "accentStrong": "#298a96"
     }
   ],
-  "games": [
-    {
-      "id": "ys-1",
-      "title": "Ys I",
-      "theme": "esteria",
-      "cover": "assets/ys/covers/ys-1.jpg",
-      "logo": "assets/ys/logos/ys-1.png"
-    },
-    {
-      "id": "ys-2",
-      "title": "Ys II",
-      "theme": "esteria",
-      "cover": "assets/ys/covers/ys-2.jpg",
-      "logo": "assets/ys/logos/ys-2.png"
-    },
-    {
-      "id": "ys-origin",
-      "title": "Ys Origin",
-      "theme": "esteria",
-      "cover": "assets/ys/covers/ys-origin.jpg",
-      "logo": "assets/ys/logos/ys-origin.png"
-    },
-    {
-      "id": "ys-oath-in-felghana",
-      "title": "Ys: The Oath in Felghana",
-      "theme": "felghana",
-      "cover": "assets/ys/covers/ys-oath-in-felghana.jpg",
-      "logo": "assets/ys/logos/ys-oath-in-felghana.png"
-    },
-    {
-      "id": "ys-memories-of-celceta",
-      "title": "Ys: Memories of Celceta",
-      "theme": "celceta",
-      "cover": "assets/ys/covers/ys-memories-of-celceta.jpg",
-      "logo": "assets/ys/logos/ys-memories-of-celceta.png"
-    },
-    {
-      "id": "ys-8",
-      "title": "Ys VIII: Lacrimosa of Dana",
-      "theme": "seiren",
-      "cover": "assets/ys/covers/ys-8.jpg",
-      "logo": "assets/ys/logos/ys-8.png"
-    },
-    {
-      "id": "ys-9",
-      "title": "Ys IX: Monstrum Nox",
-      "theme": "balduq",
-      "cover": "assets/ys/covers/ys-9.jpg",
-      "logo": "assets/ys/logos/ys-9.png"
-    },
-    {
-      "id": "ys-10",
-      "title": "Ys X: Nordics",
-      "theme": "obelia",
-      "cover": "assets/ys/covers/ys-10.jpg",
-      "logo": "assets/ys/logos/ys-10.png"
-    }
-  ]
+  "games": []
+
 }
