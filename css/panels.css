@@ -281,3 +281,7 @@ body.app-started .licence-drawer-wrap {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+.guide-button-top {
+  margin-bottom: 9px;
+}
