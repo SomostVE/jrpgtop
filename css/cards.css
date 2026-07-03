@@ -247,7 +247,13 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   color: var(--export-accent, #ffd369);
   font-size: 15px;
   font-weight: 950;
-  transform: translateY(-2px);
+  line-height: 1;
+}
+
+.export-card-rank > span {
+  position: relative;
+  top: -2px;
+  display: block;
   line-height: 1;
 }
 
