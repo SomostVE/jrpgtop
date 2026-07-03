@@ -15,7 +15,6 @@ body.app-started .side-menu {
   left: 10px;
 }
 
-
 .side-handle {
   width: 32px;
   height: 32px;
@@ -92,11 +91,16 @@ body.app-started .side-menu {
 
 .panel-button.primary {
   border: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent-strong)
+    );
   color: var(--accent-text);
 }
 
-/* Drawer licences plein écran vertical, inspiré du menu osu! */
+/* Drawer des classements */
 
 .licence-drawer-wrap {
   position: fixed;
@@ -135,7 +139,8 @@ body.app-started .licence-drawer-wrap {
   backdrop-filter: blur(3px);
 }
 
-.licence-drawer-wrap.open .licence-drawer-backdrop {
+.licence-drawer-wrap.open
+.licence-drawer-backdrop {
   opacity: 1;
   pointer-events: auto;
 }
@@ -145,21 +150,34 @@ body.app-started .licence-drawer-wrap {
   top: 0;
   right: 0;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows:
+    auto
+    auto
+    minmax(0, 1fr)
+    auto;
   width: min(470px, 100vw);
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-left:
+    1px solid rgba(255, 255, 255, 0.16);
   background:
-    linear-gradient(180deg, rgba(8, 12, 34, 0.985), rgba(4, 7, 20, 0.985));
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.58);
+    linear-gradient(
+      180deg,
+      rgba(8, 12, 34, 0.985),
+      rgba(4, 7, 20, 0.985)
+    );
+  box-shadow:
+    -24px 0 60px rgba(0, 0, 0, 0.58);
   transform: translateX(102%);
-  transition: transform 240ms cubic-bezier(.22, .8, .25, 1);
+  transition:
+    transform 240ms
+    cubic-bezier(.22, .8, .25, 1);
   pointer-events: auto;
 }
 
-.licence-drawer-wrap.open .licence-drawer {
+.licence-drawer-wrap.open
+.licence-drawer {
   transform: translateX(0);
 }
 
@@ -172,7 +190,8 @@ body.app-started .licence-drawer-wrap {
   gap: 20px;
   min-height: 92px;
   padding: 24px 24px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.12);
   background: rgba(4, 7, 20, 0.72);
 }
 
@@ -186,7 +205,8 @@ body.app-started .licence-drawer-wrap {
   flex: 0 0 auto;
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border:
+    1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
@@ -202,7 +222,8 @@ body.app-started .licence-drawer-wrap {
   position: relative;
   z-index: 2;
   padding: 14px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.1);
   background: rgba(4, 7, 20, 0.58);
 }
 
@@ -225,7 +246,8 @@ body.app-started .licence-drawer-wrap {
 .licence-search-input {
   width: 100%;
   height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border:
+    1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   outline: none;
   padding: 0 46px 0 44px;
@@ -239,18 +261,34 @@ body.app-started .licence-drawer-wrap {
 }
 
 .licence-search-input::placeholder {
-  color: color-mix(in srgb, var(--muted) 78%, transparent);
+  color:
+    color-mix(
+      in srgb,
+      var(--muted) 78%,
+      transparent
+    );
 }
 
 .licence-search-input:focus {
-  border-color: color-mix(in srgb, var(--accent) 72%, white 28%);
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 72%,
+      white 28%
+    );
   background: rgba(7, 11, 31, 0.98);
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 0 0 3px
+      color-mix(
+        in srgb,
+        var(--accent) 18%,
+        transparent
+      ),
     0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
-.licence-search-input::-webkit-search-cancel-button {
+.licence-search-input
+::-webkit-search-cancel-button {
   display: none;
 }
 
@@ -274,28 +312,38 @@ body.app-started .licence-drawer-wrap {
   color: #fff;
 }
 
+/*
+ * Une seule liste continue.
+ * Les espaces virtuels au début et à la fin
+ * permettent de centrer même le premier
+ * ou le dernier classement.
+ */
 .licence-list {
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 24px 24px 28px 40px;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 24px 0 40px;
+  overscroll-behavior: contain;
+  scroll-snap-type: y proximity;
+  scrollbar-gutter: stable;
   scrollbar-color:
-    color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.18))
+    color-mix(
+      in srgb,
+      var(--accent) 52%,
+      rgba(255, 255, 255, 0.18)
+    )
     transparent;
 }
 
-.licence-global-list,
-.licence-results-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.licence-results-list {
-  margin-top: 10px;
+.licence-list::before,
+.licence-list::after {
+  content: "";
+  flex: 0 0 calc(50% - 53px);
+  pointer-events: none;
 }
 
 .licence-entry {
@@ -306,32 +354,53 @@ body.app-started .licence-drawer-wrap {
   flex: 0 0 auto;
   min-height: 86px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--entry-accent) 62%, white 12%);
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--entry-accent) 62%,
+      white 12%
+    );
   border-radius: 7px;
   padding: 0;
   background:
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--entry-accent) 86%, black 14%),
-      color-mix(in srgb, var(--entry-accent) 64%, black 36%)
+      color-mix(
+        in srgb,
+        var(--entry-accent) 86%,
+        black 14%
+      ),
+      color-mix(
+        in srgb,
+        var(--entry-accent) 64%,
+        black 36%
+      )
     );
   color: #fff;
-  transform: translateX(var(--entry-offset));
+  transform:
+    translateX(var(--entry-offset));
   transition:
     transform 150ms ease,
     filter 150ms ease,
     border-color 150ms ease;
   text-align: left;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.34);
+  scroll-snap-align: center;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.34);
 }
 
 .licence-entry:hover {
   filter: brightness(1.12);
-  transform: translateX(calc(var(--entry-offset) - 8px));
+  transform:
+    translateX(
+      calc(var(--entry-offset) - 8px)
+    );
 }
 
 .licence-entry.active {
-  border-color: rgba(255, 255, 255, 0.96);
+  border-color:
+    rgba(255, 255, 255, 0.96);
   background:
     linear-gradient(
       90deg,
@@ -339,7 +408,10 @@ body.app-started .licence-drawer-wrap {
       rgba(220, 225, 239, 0.91)
     );
   color: #10131d;
-  transform: translateX(calc(var(--entry-offset) - 16px));
+  transform:
+    translateX(
+      calc(var(--entry-offset) - 16px)
+    );
 }
 
 .licence-entry-image {
@@ -349,7 +421,12 @@ body.app-started .licence-drawer-wrap {
   height: 100%;
   object-fit: cover;
   opacity: 0.28;
-  mask-image: linear-gradient(90deg, black 65%, transparent);
+  mask-image:
+    linear-gradient(
+      90deg,
+      black 65%,
+      transparent
+    );
 }
 
 .licence-entry-text {
@@ -377,12 +454,14 @@ body.app-started .licence-drawer-wrap {
 }
 
 .licence-empty {
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
   min-height: 150px;
   padding: 28px 18px;
   color: var(--muted);
   text-align: center;
+  scroll-snap-align: center;
 }
 
 .licence-empty strong {
@@ -399,7 +478,8 @@ body.app-started .licence-drawer-wrap {
   position: relative;
   z-index: 2;
   padding: 14px 24px 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top:
+    1px solid rgba(255, 255, 255, 0.1);
   background: rgba(4, 7, 20, 0.86);
 }
 
@@ -410,12 +490,18 @@ body.app-started .licence-drawer-wrap {
   min-height: 42px;
   border-radius: 999px;
   padding: 8px 18px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent-strong)
+    );
   color: var(--accent-text);
   font-size: 13px;
   font-weight: 900;
   text-decoration: none;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.34);
   transition:
     filter 150ms ease,
     transform 150ms ease;
