@@ -1,1 +1,297 @@
+.card {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  background: rgba(6, 8, 20, 0.84);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  transform: translateZ(0);
+}
 
+.card.ranked {
+  border-color: color-mix(in srgb, var(--accent) 88%, white 12%);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent),
+    0 16px 34px rgba(0, 0, 0, 0.56);
+}
+
+.card.chosen {
+  outline: 3px solid color-mix(in srgb, var(--accent) 60%, white 40%);
+  outline-offset: -3px;
+}
+
+.card.ghost {
+  opacity: 0.42;
+}
+
+.rank-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 42px;
+  min-height: 22px;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(7px);
+}
+
+.rank-badge::before {
+  content: "#";
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.rank-input {
+  width: 28px;
+  height: 18px;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--accent) 82%, white 18%);
+  font-size: 14px;
+  font-weight: 950;
+  text-align: left;
+  appearance: textfield;
+}
+
+.rank-input::-webkit-outer-spin-button,
+.rank-input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.info-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
+  min-height: 52px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px 12px 9px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.76));
+  pointer-events: none;
+}
+
+.info-text {
+  width: 100%;
+  text-align: center;
+}
+
+.info-bar .title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 880;
+  line-height: 1.16;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.82);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.variant-name {
+  display: block;
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--accent) 74%, white 26%);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.view-normal,
+.view-spoiler {
+  position: absolute;
+  inset: 0;
+}
+
+.view-normal {
+  display: block;
+}
+
+.view-spoiler {
+  display: none;
+}
+
+body.spoiler-on .view-normal {
+  display: none;
+}
+
+body.spoiler-on .view-spoiler {
+  display: block;
+}
+
+body.spoiler-on .info-bar {
+  display: none;
+}
+
+body.hide-titles:not(.spoiler-on) .info-bar {
+  display: none;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: rgba(5, 7, 18, 0.8);
+}
+
+.cover-blur {
+  position: absolute;
+  inset: -24px;
+  z-index: 1;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+  object-fit: cover;
+  opacity: 0.18;
+  filter: blur(18px) saturate(1.08);
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+.cover-img {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+.no-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: none;
+  place-items: center;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.28);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.spoiler-surface {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--accent) 34%, transparent), rgba(10, 14, 40, 0.42)),
+    linear-gradient(180deg, rgba(7, 10, 24, 0.95), rgba(3, 5, 14, 0.95));
+}
+
+.spoiler-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px 16px;
+}
+
+.logo-img {
+  max-width: 94%;
+  max-height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.58));
+  pointer-events: none;
+}
+
+.export-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 2px solid color-mix(in srgb, var(--export-accent, var(--accent)) 82%, white 18%);
+  border-radius: 18px;
+  background: rgba(6, 8, 20, 0.86);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--export-accent, var(--accent)) 28%, transparent),
+    0 16px 34px rgba(0, 0, 0, 0.58);
+}
+
+.export-card .cover-img {
+  transform: scale(1.01);
+}
+
+.export-card-rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 7;
+  min-width: 43px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.63);
+  color: color-mix(in srgb, var(--export-accent, var(--accent)) 82%, white 18%);
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.export-card-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 7;
+  padding: 30px 10px 10px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.82);
+}
+
+.export-card-variant {
+  display: block;
+  margin-top: 4px;
+  color: color-mix(in srgb, var(--export-accent, var(--accent)) 75%, white 25%);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.export-card.spoiler .export-card-title {
+  display: none;
+}
+
+.export-card.spoiler .cover {
+  display: none;
+}
+
+.export-card-spoiler {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--export-accent, var(--accent)) 36%, transparent), rgba(10, 14, 40, 0.44)),
+    linear-gradient(180deg, rgba(7, 10, 24, 0.96), rgba(3, 5, 14, 0.96));
+}
+
+.export-card-spoiler img {
+  max-width: 94%;
+  max-height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.58));
+}

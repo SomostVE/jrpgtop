@@ -1,1 +1,196 @@
+@media (max-width: 720px) {
+  :root {
+    --grid-columns: 1;
+    --card-width: 100%;
+    --grid-gap: 8px;
+    --grid-width: 100%;
+  }
 
+  body {
+    overflow: auto;
+  }
+
+  .config-screen {
+    padding: 22px 18px;
+  }
+
+  .app {
+    overflow: auto;
+  }
+
+  .content {
+    min-height: 100%;
+    padding: 70px 12px 100px;
+    overflow: visible;
+  }
+
+  .ranking-shell {
+    width: 100%;
+    margin: 0;
+  }
+
+  .ranking-header {
+    align-items: start;
+  }
+
+  .ranking-summary {
+    max-width: 120px;
+    font-size: 11px;
+  }
+
+  .scope-title {
+    font-size: 25px;
+  }
+
+  .grid-wrapper,
+  .section,
+  .grid,
+  .subtle-divider,
+  .unranked-label {
+    width: 100%;
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card {
+    display: grid;
+    grid-template-areas: "cover title rank";
+    grid-template-columns: 58px minmax(0, 1fr) 52px;
+    align-items: stretch;
+    width: 100%;
+    height: 78px;
+    aspect-ratio: auto;
+    border-radius: 12px;
+  }
+
+  .card .view-normal,
+  .card .view-spoiler {
+    position: relative;
+    inset: auto;
+    grid-area: cover;
+    min-width: 0;
+    height: 100%;
+  }
+
+  .card .view-spoiler {
+    display: none;
+  }
+
+  body.spoiler-on .card .view-normal {
+    display: none;
+  }
+
+  body.spoiler-on .card .view-spoiler {
+    display: block;
+  }
+
+  .card .cover,
+  .card .spoiler-surface,
+  .card .spoiler-inner {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card .cover-blur {
+    display: none;
+  }
+
+  .card .cover-img {
+    border-radius: 10px 0 0 10px;
+  }
+
+  .card .info-bar {
+    position: relative;
+    inset: auto;
+    grid-area: title;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 12px;
+    background: transparent;
+  }
+
+  .card .info-text {
+    text-align: left;
+  }
+
+  .card .info-bar .title {
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+  }
+
+  .card .rank-badge {
+    position: relative;
+    inset: auto;
+    grid-area: rank;
+    align-self: center;
+    justify-self: center;
+    min-width: 44px;
+    backdrop-filter: none;
+  }
+
+  .card .logo-img {
+    max-width: 88%;
+    max-height: 66%;
+  }
+
+  body.spoiler-on .card .info-bar {
+    display: flex;
+  }
+
+  body.hide-titles:not(.spoiler-on) .card .info-bar {
+    display: flex;
+  }
+
+  .app.finalized .grid-wrapper {
+    min-height: 0;
+  }
+
+  .side-menu {
+    top: 10px;
+    transform: none;
+  }
+
+  .side-menu-left {
+    left: 10px;
+  }
+
+  .side-menu-right {
+    right: 10px;
+  }
+
+  .side-menu .side-panel {
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: calc(100vh - 62px);
+    overflow: auto;
+  }
+
+  .licence-panel {
+    width: auto;
+  }
+
+  .licence-entry {
+    transform: none;
+  }
+
+  .licence-entry:hover,
+  .licence-entry.active {
+    transform: none;
+  }
+
+  .modal {
+    padding: 10px;
+  }
+
+  .modal-card {
+    padding: 20px;
+  }
+}
