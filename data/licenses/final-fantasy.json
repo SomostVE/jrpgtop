@@ -21,42 +21,6 @@
       "accentStrong": "#8a5cff"
     }
   ],
-  "games": [
-    {
-      "id": "ff7",
-      "title": "Final Fantasy VII",
-      "theme": "meteor",
-      "logo": "https://placehold.co/900x300/111827/ffffff?text=FINAL+FANTASY+VII",
-      "variants": [
-        {
-          "id": "og",
-          "label": "OG",
-          "type": "original",
-          "title": "Final Fantasy VII",
-          "cover": "https://placehold.co/600x800/1d2b45/ffffff?text=FFVII+OG"
-        },
-        {
-          "id": "remake",
-          "label": "Remake",
-          "type": "remake",
-          "title": "Final Fantasy VII Remake",
-          "cover": "https://placehold.co/600x800/26334d/ffffff?text=FFVII+Remake"
-        }
-      ]
-    },
-    {
-      "id": "ff9",
-      "title": "Final Fantasy IX",
-      "theme": "crystal",
-      "cover": "https://placehold.co/600x800/35506e/ffffff?text=Final+Fantasy+IX",
-      "logo": "https://placehold.co/900x300/111827/ffffff?text=FINAL+FANTASY+IX"
-    },
-    {
-      "id": "ff10",
-      "title": "Final Fantasy X",
-      "theme": "crystal",
-      "cover": "https://placehold.co/600x800/2c5e75/ffffff?text=Final+Fantasy+X",
-      "logo": "https://placehold.co/900x300/111827/ffffff?text=FINAL+FANTASY+X"
-    }
-  ]
+  "games": []
+    
 }
