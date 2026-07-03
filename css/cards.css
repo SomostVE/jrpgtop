@@ -247,6 +247,7 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   color: var(--export-accent, #ffd369);
   font-size: 15px;
   font-weight: 950;
+  transform: translateY(-1px);
   line-height: 1;
 }
 
