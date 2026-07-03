@@ -96,6 +96,7 @@ body.app-started .side-menu {
 }
 
 /* Drawer licences plein écran vertical, inspiré du menu osu! */
+
 .licence-drawer-wrap {
   position: fixed;
   inset: 0;
@@ -142,8 +143,11 @@ body.app-started .licence-drawer-wrap {
   position: absolute;
   top: 0;
   right: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   width: min(470px, 100vw);
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   border-left: 1px solid rgba(255, 255, 255, 0.16);
   background:
@@ -193,15 +197,104 @@ body.app-started .licence-drawer-wrap {
   background: rgba(255, 255, 255, 0.15);
 }
 
+.licence-search-area {
+  position: relative;
+  z-index: 2;
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(4, 7, 20, 0.58);
+}
+
+.licence-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.licence-search-icon {
+  position: absolute;
+  left: 15px;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.licence-search-input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  outline: none;
+  padding: 0 46px 0 44px;
+  background: rgba(4, 7, 20, 0.88);
+  color: var(--text);
+  font-size: 14px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.licence-search-input::placeholder {
+  color: color-mix(in srgb, var(--muted) 78%, transparent);
+}
+
+.licence-search-input:focus {
+  border-color: color-mix(in srgb, var(--accent) 72%, white 28%);
+  background: rgba(7, 11, 31, 0.98);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.licence-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.licence-search-clear {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.licence-search-clear:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
 .licence-list {
-  height: calc(100vh - 92px);
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 24px 24px 28px 40px;
+  scrollbar-color:
+    color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.18))
+    transparent;
+}
+
+.licence-global-list,
+.licence-results-list {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  padding: 28px 24px 40px 40px;
+}
+
+.licence-results-list {
+  margin-top: 10px;
 }
 
 .licence-entry {
@@ -280,6 +373,60 @@ body.app-started .licence-drawer-wrap {
   opacity: 0.78;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.licence-empty {
+  display: grid;
+  place-items: center;
+  min-height: 150px;
+  padding: 28px 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.licence-empty strong {
+  color: var(--text);
+  font-size: 16px;
+}
+
+.licence-empty span {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.licence-drawer-footer {
+  position: relative;
+  z-index: 2;
+  padding: 14px 24px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(4, 7, 20, 0.86);
+}
+
+.request-content-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+  transition:
+    filter 150ms ease,
+    transform 150ms ease;
+}
+
+.request-content-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.request-content-button:active {
+  transform: translateY(1px);
 }
 
 .guide-button-top {

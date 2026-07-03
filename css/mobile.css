@@ -177,6 +177,7 @@
 
   .licence-drawer {
     width: 100vw;
+    height: 100dvh;
     border-left: 0;
   }
 
@@ -189,10 +190,19 @@
     font-size: 22px;
   }
 
+  .licence-search-area {
+    padding: 12px 18px;
+  }
+
+  .licence-search-input {
+    height: 42px;
+    font-size: 16px;
+  }
+
   .licence-list {
-    height: calc(100vh - 84px);
+    height: auto;
     justify-content: flex-start;
-    padding: 24px 18px 40px;
+    padding: 18px 18px 26px;
   }
 
   .licence-entry,
@@ -207,6 +217,14 @@
 
   .licence-entry-name {
     font-size: 21px;
+  }
+
+  .licence-drawer-footer {
+    padding: 12px 18px max(14px, env(safe-area-inset-bottom));
+  }
+
+  .request-content-button {
+    min-height: 44px;
   }
 
   .modal {
