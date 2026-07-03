@@ -236,13 +236,18 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   top: 10px;
   left: 10px;
   z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 43px;
-  padding: 3px 8px;
+  height: 24px;
+  padding: 0 8px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.63);
   color: var(--export-accent, #ffd369);
   font-size: 15px;
   font-weight: 950;
+  line-height: 1;
 }
 
 .export-card-title {
