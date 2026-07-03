@@ -219,11 +219,11 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  border: 2px solid color-mix(in srgb, var(--export-accent, var(--accent)) 82%, white 18%);
+  border: 2px solid var(--export-accent, #ffd369);
   border-radius: 18px;
   background: rgba(6, 8, 20, 0.86);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--export-accent, var(--accent)) 28%, transparent),
+    0 0 0 1px rgba(255, 211, 105, 0.28),
     0 16px 34px rgba(0, 0, 0, 0.58);
 }
 
@@ -240,7 +240,7 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   padding: 3px 8px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.63);
-  color: color-mix(in srgb, var(--export-accent, var(--accent)) 82%, white 18%);
+  color: var(--export-accent, #ffd369);
   font-size: 15px;
   font-weight: 950;
 }
@@ -264,7 +264,7 @@ body.hide-titles:not(.spoiler-on) .info-bar {
 .export-card-variant {
   display: block;
   margin-top: 4px;
-  color: color-mix(in srgb, var(--export-accent, var(--accent)) 75%, white 25%);
+  color: #ffe08a;
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -285,7 +285,7 @@ body.hide-titles:not(.spoiler-on) .info-bar {
   place-items: center;
   padding: 20px;
   background:
-    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--export-accent, var(--accent)) 36%, transparent), rgba(10, 14, 40, 0.44)),
+    radial-gradient(circle at 30% 10%, rgba(255, 211, 105, 0.22), rgba(10, 14, 40, 0.44)),
     linear-gradient(180deg, rgba(7, 10, 24, 0.96), rgba(3, 5, 14, 0.96));
 }
 
