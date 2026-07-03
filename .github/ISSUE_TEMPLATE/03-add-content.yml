@@ -1,0 +1,83 @@
+name: Add content
+description: Request a new licence, game, theme, cover or logo for JRPGTop.
+title: "[CONTENT REQUEST] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please search existing issues before submitting.
+        Merci de vérifier les demandes existantes avant de publier.
+
+  - type: dropdown
+    id: request-type
+    attributes:
+      label: Request type / Type de demande
+      description: Select what you want to add or modify.
+      options:
+        - New licence / Nouvelle licence
+        - New game / Nouveau jeu
+        - New theme / Nouveau thème
+        - Cover update / Modification de jaquette
+        - Logo update / Modification de logo
+    validations:
+      required: true
+
+  - type: input
+    id: licence
+    attributes:
+      label: Licence
+      description: The licence concerned by the request.
+      placeholder: "Example: Ys, Final Fantasy, Trails..."
+    validations:
+      required: true
+
+  - type: input
+    id: game
+    attributes:
+      label: Game / Jeu
+      description: Leave empty when requesting only a new licence.
+      placeholder: "Example: Ys VIII: Lacrimosa of Dana"
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Original, remake, remaster, platform or region.
+      placeholder: "Example: Remake, Steam, Nintendo Switch..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: images
+    attributes:
+      label: Suggested images / Images proposées
+      description: Add links or drag and drop the cover, logo and theme background.
+      placeholder: |
+        Cover / Jaquette:
+        Logo:
+        Theme background / Fond:
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional information / Informations supplémentaires
+      description: Add anything useful for correctly adding the content.
+      placeholder: Describe the request...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Verification
+      options:
+        - label: I searched existing issues before submitting this request.
+          required: true
+        - label: This request concerns only one licence or one game.
+          required: true
