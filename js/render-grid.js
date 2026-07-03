@@ -53,12 +53,7 @@ function cardHtml(item, rank) {
       <div class="info-bar">
         <div class="info-text">
           <div class="title">${title}</div>
-
-          ${
-            variant
-              ? `<span class="variant-name">${variant}</span>`
-              : ""
-          }
+          ${variant ? `<span class="variant-name">${variant}</span>` : ""}
         </div>
       </div>
 
@@ -71,7 +66,6 @@ function cardHtml(item, rank) {
             src="${cover}"
             alt=""
           />
-
           <img
             class="cover-img"
             crossorigin="anonymous"
@@ -79,16 +73,12 @@ function cardHtml(item, rank) {
             src="${cover}"
             alt="${title}"
           />
-
-          <div class="no-cover">
-            ${escapeHtml(t("noCover"))}
-          </div>
+          <div class="no-cover">${escapeHtml(t("noCover"))}</div>
         </div>
       </div>
 
       <div class="view-spoiler">
         <div class="spoiler-surface"></div>
-
         <div class="spoiler-inner">
           <img
             class="logo-img"
@@ -109,23 +99,14 @@ function bindImageFallbacks(root) {
       "error",
       () => {
         const cover = image.closest(".cover");
-
-        if (!cover) {
-          return;
-        }
+        if (!cover) return;
 
         const blur = cover.querySelector(".cover-blur");
         const noCover = cover.querySelector(".no-cover");
 
         image.style.display = "none";
-
-        if (blur) {
-          blur.style.display = "none";
-        }
-
-        if (noCover) {
-          noCover.style.display = "grid";
-        }
+        if (blur) blur.style.display = "none";
+        if (noCover) noCover.style.display = "grid";
       },
       { once: true }
     );
@@ -163,22 +144,13 @@ export function getCurrentScopeTitle() {
     return t("allGames");
   }
 
-  return (
-    getLicenseById(state.rankingScope)?.name ||
-    "JRPGTop"
-  );
+  return getLicenseById(state.rankingScope)?.name || "JRPGTop";
 }
 
 export function getRankedKeysForCurrentScope() {
   const state = getState();
-
-  const available = new Set(
-    getActiveItems(state).map(item => item.key)
-  );
-
-  const order =
-    state.rankings[state.rankingScope] ||
-    [];
+  const available = new Set(getActiveItems(state).map(item => item.key));
+  const order = state.rankings[state.rankingScope] || [];
 
   return order.filter(key => available.has(key));
 }
@@ -189,46 +161,31 @@ export function getRankedItemsForCurrentScope() {
     .filter(Boolean);
 }
 
-// Compatibilité avec les anciens imports.
-export const getRankedKeysForCurrentLicense =
-  getRankedKeysForCurrentScope;
-
-export const getRankedItemsForCurrentLicense =
-  getRankedItemsForCurrentScope;
+// Alias conservés pour les anciens imports.
+export const getRankedKeysForCurrentLicense = getRankedKeysForCurrentScope;
+export const getRankedItemsForCurrentLicense = getRankedItemsForCurrentScope;
 
 export function renderGrid() {
   const state = getState();
   const items = getActiveItems(state);
+  const itemMap = new Map(items.map(item => [item.key, item]));
 
-  const itemMap = new Map(
-    items.map(item => [item.key, item])
-  );
-
-  const rankedKeys =
-    getRankedKeysForCurrentScope();
-
-  const rankedSet =
-    new Set(rankedKeys);
+  const rankedKeys = getRankedKeysForCurrentScope();
+  const rankedSet = new Set(rankedKeys);
 
   const rankedItems = rankedKeys
     .map(key => itemMap.get(key))
     .filter(Boolean);
 
-  const unrankedItems = items.filter(
-    item => !rankedSet.has(item.key)
-  );
+  const unrankedItems = items.filter(item => !rankedSet.has(item.key));
 
   rankedGrid.innerHTML = rankedItems
-    .map((item, index) =>
-      cardHtml(item, index + 1)
-    )
+    .map((item, index) => cardHtml(item, index + 1))
     .join("");
 
   unrankedGrid.innerHTML = state.finalized
     ? ""
-    : unrankedItems
-        .map(item => cardHtml(item, null))
-        .join("");
+    : unrankedItems.map(item => cardHtml(item, null)).join("");
 
   bindImageFallbacks(rankedGrid);
   bindImageFallbacks(unrankedGrid);
@@ -240,38 +197,22 @@ export function renderGrid() {
     getCatalog().app?.defaultBackground ||
     "";
 
-  document.documentElement.style.setProperty(
-    "--accent",
-    theme.accent
-  );
-
+  document.documentElement.style.setProperty("--accent", theme.accent);
   document.documentElement.style.setProperty(
     "--accent-strong",
     theme.accentStrong
   );
 
-  document.body.classList.toggle(
-    "spoiler-on",
-    state.spoilerOn
-  );
-
+  document.body.classList.toggle("spoiler-on", state.spoilerOn);
   document.body.classList.toggle(
     "hide-titles",
     state.hideTitles && !state.spoilerOn
   );
 
-  app.classList.toggle(
-    "unranked-empty",
-    unrankedItems.length === 0
-  );
+  app.classList.toggle("unranked-empty", unrankedItems.length === 0);
+  app.classList.toggle("finalized", state.finalized);
 
-  app.classList.toggle(
-    "finalized",
-    state.finalized
-  );
-
-  scopeTitle.textContent =
-    getCurrentScopeTitle();
+  scopeTitle.textContent = getCurrentScopeTitle();
 
   rankingSummary.textContent = t("rankedCount", {
     ranked: rankedItems.length,
@@ -293,42 +234,17 @@ function calculateExportLayout(count) {
   const maxWidth = 1780;
   const maxHeight = 860;
   const gap = count > 35 ? 10 : 14;
-
   let best = null;
 
-  for (
-    let columns = 1;
-    columns <= Math.min(12, count);
-    columns += 1
-  ) {
-    const rows =
-      Math.ceil(count / columns);
+  for (let columns = 1; columns <= Math.min(12, count); columns += 1) {
+    const rows = Math.ceil(count / columns);
+    const widthLimited = (maxWidth - gap * (columns - 1)) / columns;
+    const heightLimited = ((maxHeight - gap * (rows - 1)) / rows) * 0.75;
+    const cardWidth = Math.floor(Math.min(widthLimited, heightLimited, 220));
 
-    const widthLimited =
-      (maxWidth - gap * (columns - 1)) /
-      columns;
+    if (cardWidth < 72) continue;
 
-    const heightLimited =
-      (
-        (maxHeight - gap * (rows - 1)) /
-        rows
-      ) * 0.75;
-
-    const cardWidth = Math.floor(
-      Math.min(
-        widthLimited,
-        heightLimited,
-        220
-      )
-    );
-
-    if (cardWidth < 72) {
-      continue;
-    }
-
-    const score =
-      cardWidth -
-      Math.abs(columns - rows * 1.6) * 0.5;
+    const score = cardWidth - Math.abs(columns - rows * 1.6) * 0.5;
 
     if (!best || score > best.score) {
       best = {
@@ -340,25 +256,17 @@ function calculateExportLayout(count) {
     }
   }
 
-  return (
-    best || {
-      columns: Math.min(12, count),
-      cardWidth: 72,
-      gap
-    }
-  );
+  return best || {
+    columns: Math.min(12, count),
+    cardWidth: 72,
+    gap
+  };
 }
 
-/**
- * Produit toujours la même structure pour les badges,
- * en mode normal comme en mode anti-spoiler.
- */
 function exportRankHtml(rank) {
   return `
     <div class="export-card-rank">
-      <span class="export-card-rank-text">
-        #${rank}
-      </span>
+      <span class="export-card-rank-number">${rank}</span>
     </div>
   `;
 }
@@ -398,10 +306,7 @@ function exportCardHtml(item, rank, state) {
           src="${cover}"
           alt="${title}"
         />
-
-        <div class="no-cover">
-          ${escapeHtml(t("noCover"))}
-        </div>
+        <div class="no-cover">${escapeHtml(t("noCover"))}</div>
       </div>
 
       ${
@@ -410,16 +315,7 @@ function exportCardHtml(item, rank, state) {
           : `
             <div class="export-card-title">
               ${title}
-
-              ${
-                variant
-                  ? `
-                    <span class="export-card-variant">
-                      ${variant}
-                    </span>
-                  `
-                  : ""
-              }
+              ${variant ? `<span class="export-card-variant">${variant}</span>` : ""}
             </div>
           `
       }
@@ -430,15 +326,9 @@ function exportCardHtml(item, rank, state) {
 export function renderExportScene() {
   const state = getState();
   const theme = getActiveTheme(state);
-
-  const rankedItems =
-    getRankedItemsForCurrentScope();
-
-  const layout =
-    calculateExportLayout(rankedItems.length);
-
-  const total =
-    getActiveItems(state).length;
+  const rankedItems = getRankedItemsForCurrentScope();
+  const layout = calculateExportLayout(rankedItems.length);
+  const total = getActiveItems(state).length;
 
   exportStage.style.setProperty(
     "--export-accent",
@@ -460,22 +350,15 @@ export function renderExportScene() {
     <div class="export-content">
       <header class="export-header">
         <div>
-          <div class="export-brand">
-            JRPGTop
-          </div>
-
-          <div class="export-title">
-            ${escapeHtml(getCurrentScopeTitle())}
-          </div>
+          <div class="export-brand">JRPGTop</div>
+          <div class="export-title">${escapeHtml(getCurrentScopeTitle())}</div>
         </div>
 
         <div class="export-count">
-          ${escapeHtml(
-            t("rankedCount", {
-              ranked: rankedItems.length,
-              total
-            })
-          )}
+          ${escapeHtml(t("rankedCount", {
+            ranked: rankedItems.length,
+            total
+          }))}
         </div>
       </header>
 
@@ -488,13 +371,7 @@ export function renderExportScene() {
         "
       >
         ${rankedItems
-          .map((item, index) =>
-            exportCardHtml(
-              item,
-              index + 1,
-              state
-            )
-          )
+          .map((item, index) => exportCardHtml(item, index + 1, state))
           .join("")}
       </div>
     </div>

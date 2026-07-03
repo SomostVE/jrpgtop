@@ -57,74 +57,6 @@ async function waitForImages(root) {
   );
 }
 
-/**
- * Récupère la position et le style de chaque numéro avant la capture.
- * Les coordonnées sont calculées relativement à la scène 1920 × 1080.
- */
-function getExportRankLabels() {
-  const stageRect = exportStage.getBoundingClientRect();
-
-  const accent =
-    exportStage.style
-      .getPropertyValue("--export-accent")
-      .trim() || "#ffd369";
-
-  return [...exportStage.querySelectorAll(".export-card-rank")].map(badge => {
-    const rect = badge.getBoundingClientRect();
-
-    return {
-      text: badge.textContent.trim(),
-
-      x:
-        rect.left -
-        stageRect.left +
-        rect.width / 2,
-
-      y:
-        rect.top -
-        stageRect.top +
-        rect.height / 2 -
-        1,
-
-      color: accent,
-      fontSize: 15,
-      fontWeight: "900",
-      fontFamily: '"Segoe UI", Arial, sans-serif'
-    };
-  });
-}
-
-/**
- * Redessine les numéros sur le Canvas après html2canvas.
- * Cela évite le mauvais alignement vertical produit par html2canvas.
- */
-function drawRankLabels(canvas, labels) {
-  const context = canvas.getContext("2d");
-
-  if (!context) {
-    throw new Error("Impossible d'obtenir le contexte 2D du Canvas.");
-  }
-
-  context.save();
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-
-  for (const label of labels) {
-    context.font =
-      `${label.fontWeight} ${label.fontSize}px ${label.fontFamily}`;
-
-    context.fillStyle = label.color;
-
-    context.fillText(
-      label.text,
-      label.x,
-      label.y
-    );
-  }
-
-  context.restore();
-}
-
 async function captureExportCanvas() {
   if (!window.html2canvas) {
     throw new Error("html2canvas n'est pas chargé.");
@@ -138,37 +70,17 @@ async function captureExportCanvas() {
 
   await waitForImages(exportStage);
 
-  const rankLabels = getExportRankLabels();
-
-  const canvas = await window.html2canvas(exportStage, {
+  return window.html2canvas(exportStage, {
     backgroundColor: "#070a1b",
     useCORS: true,
     allowTaint: false,
     logging: false,
-
     width: 1920,
     height: 1080,
     scale: 1,
-
     scrollX: 0,
-    scrollY: 0,
-
-    onclone: clonedDocument => {
-      /*
-       * On garde les capsules sombres, mais on masque leur texte
-       * dans la copie utilisée par html2canvas.
-       */
-      clonedDocument
-        .querySelectorAll(".export-card-rank-text")
-        .forEach(label => {
-          label.style.visibility = "hidden";
-        });
-    }
+    scrollY: 0
   });
-
-  drawRankLabels(canvas, rankLabels);
-
-  return canvas;
 }
 
 function getFileName() {
@@ -238,11 +150,7 @@ export function openPreview() {
   }
 
   if (previewResizeHandler) {
-    window.removeEventListener(
-      "resize",
-      previewResizeHandler
-    );
-
+    window.removeEventListener("resize", previewResizeHandler);
     previewResizeHandler = null;
   }
 
@@ -261,11 +169,7 @@ export function openPreview() {
   window.requestAnimationFrame(fitPreview);
 
   previewResizeHandler = fitPreview;
-
-  window.addEventListener(
-    "resize",
-    previewResizeHandler
-  );
+  window.addEventListener("resize", previewResizeHandler);
 }
 
 export function closePreview() {
@@ -273,11 +177,7 @@ export function closePreview() {
   previewMount.innerHTML = "";
 
   if (previewResizeHandler) {
-    window.removeEventListener(
-      "resize",
-      previewResizeHandler
-    );
-
+    window.removeEventListener("resize", previewResizeHandler);
     previewResizeHandler = null;
   }
 }
