@@ -12,8 +12,8 @@ import {
 
 const CAPTURE_WIDTH = 1920;
 const CAPTURE_HEIGHT = 1080;
-const HTML_TO_IMAGE_MODULE =
-  "https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/+esm";
+const HTML_TO_IMAGE_URL =
+  "https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js";
 
 const app = document.getElementById("app");
 const previewModal = document.getElementById("preview-modal");
@@ -43,7 +43,7 @@ async function waitForImages(root) {
       }
 
       await new Promise(resolve => {
-        const timeout = window.setTimeout(resolve, 5000);
+        const timeout = window.setTimeout(resolve, 8000);
 
         const finish = () => {
           window.clearTimeout(timeout);
@@ -53,17 +53,31 @@ async function waitForImages(root) {
         image.addEventListener("load", finish, { once: true });
         image.addEventListener("error", finish, { once: true });
       });
+
+      if (image.naturalWidth > 0 && image.decode) {
+        try {
+          await image.decode();
+        } catch {}
+      }
     })
   );
 }
 
 function copyFormValues(sourceRoot, cloneRoot) {
-  const sourceFields = sourceRoot.querySelectorAll("input, textarea, select");
-  const cloneFields = cloneRoot.querySelectorAll("input, textarea, select");
+  const sourceFields = sourceRoot.querySelectorAll(
+    "input, textarea, select"
+  );
+
+  const cloneFields = cloneRoot.querySelectorAll(
+    "input, textarea, select"
+  );
 
   sourceFields.forEach((source, index) => {
     const clone = cloneFields[index];
-    if (!clone) return;
+
+    if (!clone) {
+      return;
+    }
 
     if (source instanceof HTMLInputElement) {
       clone.value = source.value;
@@ -96,33 +110,28 @@ function copyFormValues(sourceRoot, cloneRoot) {
 
 function getStylesheetLinks() {
   return [...document.querySelectorAll('link[rel="stylesheet"]')]
-    .map(link => `<link rel="stylesheet" href="${escapeAttribute(link.href)}" />`)
+    .map(
+      link =>
+        `<link rel="stylesheet" href="${escapeAttribute(link.href)}" />`
+    )
     .join("\n");
 }
 
 function createCaptureFrame() {
-  const clone = app.cloneNode(true);
-
-  copyFormValues(app, clone);
-
-  clone.classList.add("visible");
-  clone.setAttribute("aria-hidden", "false");
-  clone.style.display = "block";
-  clone.style.width = `${CAPTURE_WIDTH}px`;
-  clone.style.height = `${CAPTURE_HEIGHT}px`;
-
   const iframe = document.createElement("iframe");
 
   iframe.title = "JRPGTop export";
   iframe.setAttribute("aria-hidden", "true");
-  iframe.style.position = "fixed";
-  iframe.style.left = "-20000px";
-  iframe.style.top = "0";
-  iframe.style.width = `${CAPTURE_WIDTH}px`;
-  iframe.style.height = `${CAPTURE_HEIGHT}px`;
-  iframe.style.border = "0";
-  iframe.style.opacity = "0";
-  iframe.style.pointerEvents = "none";
+
+  Object.assign(iframe.style, {
+    position: "fixed",
+    top: "0",
+    left: "-20000px",
+    width: `${CAPTURE_WIDTH}px`,
+    height: `${CAPTURE_HEIGHT}px`,
+    border: "0",
+    pointerEvents: "none"
+  });
 
   const rootInlineStyle =
     document.documentElement.getAttribute("style") || "";
@@ -135,6 +144,7 @@ function createCaptureFrame() {
     >
       <head>
         <meta charset="UTF-8" />
+
         <meta
           name="viewport"
           content="width=${CAPTURE_WIDTH}, initial-scale=1"
@@ -154,26 +164,35 @@ function createCaptureFrame() {
             background: #070a1b !important;
           }
 
-          #app {
+          body {
+            position: relative !important;
+          }
+
+          #capture-app {
             display: block !important;
             position: fixed !important;
             inset: 0 !important;
             width: ${CAPTURE_WIDTH}px !important;
             height: ${CAPTURE_HEIGHT}px !important;
+            overflow: hidden !important;
+          }
+
+          #capture-app #divider,
+          #capture-app #unranked-label,
+          #capture-app #unranked-section {
+            display: none !important;
+          }
+
+          #capture-app .grid-wrapper {
+            justify-content: center !important;
+            min-height: calc(100vh - 130px) !important;
           }
         </style>
+
+        <script src="${HTML_TO_IMAGE_URL}"></script>
       </head>
 
-      <body class="${escapeAttribute(document.body.className)}">
-        ${clone.outerHTML}
-
-        <script type="module">
-          import { toPng } from "${HTML_TO_IMAGE_MODULE}";
-
-          window.__jrpgtopToPng = toPng;
-          window.__jrpgtopCaptureReady = true;
-        </script>
-      </body>
+      <body class="${escapeAttribute(document.body.className)}"></body>
     </html>
   `;
 
@@ -182,11 +201,15 @@ function createCaptureFrame() {
   return iframe;
 }
 
-async function waitForCaptureFrame(iframe) {
+async function waitForFrameLoad(iframe) {
   await new Promise((resolve, reject) => {
     const timeout = window.setTimeout(() => {
-      reject(new Error("Le rendu d'export a mis trop de temps à se charger."));
-    }, 15000);
+      reject(
+        new Error(
+          "Le rendu d'export a mis trop de temps à se charger."
+        )
+      );
+    }, 20000);
 
     iframe.addEventListener(
       "load",
@@ -207,12 +230,16 @@ async function waitForCaptureFrame(iframe) {
 
   const start = performance.now();
 
-  while (!frameWindow.__jrpgtopCaptureReady) {
-    if (performance.now() - start > 15000) {
-      throw new Error("La bibliothèque d'export ne s'est pas chargée.");
+  while (!frameWindow.htmlToImage?.toPng) {
+    if (performance.now() - start > 20000) {
+      throw new Error(
+        "La bibliothèque d'export ne s'est pas chargée."
+      );
     }
 
-    await new Promise(resolve => window.setTimeout(resolve, 50));
+    await new Promise(resolve =>
+      window.setTimeout(resolve, 50)
+    );
   }
 
   if (frameDocument.fonts?.ready) {
@@ -221,43 +248,86 @@ async function waitForCaptureFrame(iframe) {
     } catch {}
   }
 
-  await waitForImages(frameDocument);
-
-  await new Promise(resolve =>
-    frameWindow.requestAnimationFrame(() =>
-      frameWindow.requestAnimationFrame(resolve)
-    )
-  );
-
   return {
     frameWindow,
     frameDocument
   };
 }
 
-async function captureCurrentPage() {
+function createCaptureApp(frameDocument) {
+  const clone = app.cloneNode(true);
+
+  copyFormValues(app, clone);
+
+  clone.id = "capture-app";
+  clone.classList.add("visible", "finalized");
+  clone.setAttribute("aria-hidden", "false");
+
+  clone.querySelector("#divider")?.remove();
+  clone.querySelector("#unranked-label")?.remove();
+  clone.querySelector("#unranked-section")?.remove();
+
+  frameDocument.body.appendChild(clone);
+
+  return clone;
+}
+
+async function validateCaptureLayout(captureApp) {
+  const card = captureApp.querySelector(".card");
+
+  if (!card) {
+    throw new Error("Aucune carte à exporter.");
+  }
+
+  const cardStyle =
+    captureApp.ownerDocument.defaultView.getComputedStyle(card);
+
+  if (
+    cardStyle.position !== "relative" ||
+    Number.parseFloat(cardStyle.width) < 50 ||
+    Number.parseFloat(cardStyle.height) < 50
+  ) {
+    throw new Error(
+      "Les styles de la page d'export ne sont pas chargés."
+    );
+  }
+}
+
+async function captureCurrentRanking() {
   const iframe = createCaptureFrame();
 
   try {
-    const { frameWindow, frameDocument } =
-      await waitForCaptureFrame(iframe);
+    const {
+      frameWindow,
+      frameDocument
+    } = await waitForFrameLoad(iframe);
 
-    const captureApp = frameDocument.getElementById("app");
+    const captureApp =
+      createCaptureApp(frameDocument);
 
-    if (!captureApp) {
-      throw new Error("La page à exporter est introuvable.");
-    }
+    await waitForImages(captureApp);
 
-    return await frameWindow.__jrpgtopToPng(captureApp, {
-      width: CAPTURE_WIDTH,
-      height: CAPTURE_HEIGHT,
-      canvasWidth: CAPTURE_WIDTH,
-      canvasHeight: CAPTURE_HEIGHT,
-      pixelRatio: 1,
-      backgroundColor: "#070a1b",
-      cacheBust: true,
-      skipAutoScale: true
-    });
+    await new Promise(resolve =>
+      frameWindow.requestAnimationFrame(() =>
+        frameWindow.requestAnimationFrame(resolve)
+      )
+    );
+
+    await validateCaptureLayout(captureApp);
+
+    return await frameWindow.htmlToImage.toPng(
+      captureApp,
+      {
+        width: CAPTURE_WIDTH,
+        height: CAPTURE_HEIGHT,
+        canvasWidth: CAPTURE_WIDTH,
+        canvasHeight: CAPTURE_HEIGHT,
+        pixelRatio: 1,
+        backgroundColor: "#070a1b",
+        cacheBust: true,
+        skipAutoScale: true
+      }
+    );
   } finally {
     iframe.remove();
   }
@@ -288,14 +358,9 @@ function getFileName() {
 }
 
 function showPreviewLoading() {
-  previewMount.innerHTML = "";
-
-  const loading = document.createElement("div");
-
-  loading.className = "preview-loading";
-  loading.textContent = t("generatingPreview");
-
-  previewMount.appendChild(loading);
+  previewMount.innerHTML = `
+    <div class="preview-loading">…</div>
+  `;
 }
 
 function showPreviewImage(dataUrl) {
@@ -317,7 +382,7 @@ export async function exportTop() {
   }
 
   try {
-    const dataUrl = await captureCurrentPage();
+    const dataUrl = await captureCurrentRanking();
     const link = document.createElement("a");
 
     link.download = getFileName();
@@ -342,7 +407,8 @@ export async function openPreview() {
   showPreviewLoading();
 
   try {
-    const dataUrl = await captureCurrentPage();
+    const dataUrl =
+      await captureCurrentRanking();
 
     if (!previewModal.hidden) {
       showPreviewImage(dataUrl);
@@ -350,14 +416,11 @@ export async function openPreview() {
   } catch (error) {
     console.error("Preview failed:", error);
 
-    previewMount.innerHTML = "";
-
-    const message = document.createElement("div");
-
-    message.className = "preview-loading";
-    message.textContent = t("previewFailed");
-
-    previewMount.appendChild(message);
+    previewMount.innerHTML = `
+      <div class="preview-loading">
+        ${t("exportFailed")}
+      </div>
+    `;
   }
 }
 
