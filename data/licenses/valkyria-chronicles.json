@@ -1,0 +1,18 @@
+{
+  "id": "valkyria-chronicles",
+  "name": "Valkyria Chronicles",
+  "accent": "#d8b37a",
+  "accentStrong": "#8d5f2f",
+  "menuImage": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+  "defaultTheme": "gallia",
+  "themes": [
+    {
+      "id": "gallia",
+      "name": "Gallia",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#d8b37a",
+      "accentStrong": "#8d5f2f"
+    }
+  ],
+  "games": []
+}

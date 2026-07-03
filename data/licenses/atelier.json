@@ -1,0 +1,18 @@
+{
+  "id": "atelier",
+  "name": "Atelier",
+  "accent": "#f3a7c8",
+  "accentStrong": "#c85f91",
+  "menuImage": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+  "defaultTheme": "atelier",
+  "themes": [
+    {
+      "id": "atelier",
+      "name": "Atelier",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#f3a7c8",
+      "accentStrong": "#c85f91"
+    }
+  ],
+  "games": []
+}

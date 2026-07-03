@@ -1,0 +1,18 @@
+{
+  "id": "romancing-saga",
+  "name": "Romancing SaGa",
+  "accent": "#d7b86a",
+  "accentStrong": "#8f6d27",
+  "menuImage": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+  "defaultTheme": "saga",
+  "themes": [
+    {
+      "id": "saga",
+      "name": "SaGa",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#d7b86a",
+      "accentStrong": "#8f6d27"
+    }
+  ],
+  "games": []
+}

@@ -11,6 +11,15 @@
     "licenses/final-fantasy.json",
     "licenses/star-ocean.json",
     "licenses/ys.json",
-    "licenses/standalone.json"
+    "licenses/standalone.json",
+    "licenses/neptunia.json",
+    "licenses/atelier.json",
+    "licenses/dragon-quest.json",
+    "licenses/romancing-saga.json",
+    "licenses/fire-emblem.json",
+    "licenses/mana.json",
+    "licenses/kingdom-hearts.json",
+    "licenses/valkyria-chronicles.json",
+    "licenses/etrian-odyssey.json"
   ]
 }

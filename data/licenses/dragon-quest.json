@@ -1,0 +1,18 @@
+{
+  "id": "dragon-quest",
+  "name": "Dragon Quest",
+  "accent": "#62b7ff",
+  "accentStrong": "#2863c7",
+  "menuImage": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+  "defaultTheme": "erdrick",
+  "themes": [
+    {
+      "id": "erdrick",
+      "name": "Erdrick",
+      "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3375780/page_bg_raw.jpg?t=1766080552",
+      "accent": "#62b7ff",
+      "accentStrong": "#2863c7"
+    }
+  ],
+  "games": []
+}
