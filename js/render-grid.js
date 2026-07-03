@@ -16,7 +16,6 @@ const app = document.getElementById("app");
 const scopeTitle = document.getElementById("scope-title");
 const rankingSummary = document.getElementById("ranking-summary");
 const backgroundImage = document.getElementById("background-image");
-const exportStage = document.getElementById("export-stage");
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -162,8 +161,11 @@ export function getRankedItemsForCurrentScope() {
 }
 
 // Alias conservés pour les anciens imports.
-export const getRankedKeysForCurrentLicense = getRankedKeysForCurrentScope;
-export const getRankedItemsForCurrentLicense = getRankedItemsForCurrentScope;
+export const getRankedKeysForCurrentLicense =
+  getRankedKeysForCurrentScope;
+
+export const getRankedItemsForCurrentLicense =
+  getRankedItemsForCurrentScope;
 
 export function renderGrid() {
   const state = getState();
@@ -197,7 +199,11 @@ export function renderGrid() {
     getCatalog().app?.defaultBackground ||
     "";
 
-  document.documentElement.style.setProperty("--accent", theme.accent);
+  document.documentElement.style.setProperty(
+    "--accent",
+    theme.accent
+  );
+
   document.documentElement.style.setProperty(
     "--accent-strong",
     theme.accentStrong
@@ -218,164 +224,4 @@ export function renderGrid() {
     ranked: rankedItems.length,
     total: items.length
   });
-
-  renderExportScene();
-}
-
-function calculateExportLayout(count) {
-  if (count <= 0) {
-    return {
-      columns: 1,
-      cardWidth: 190,
-      gap: 14
-    };
-  }
-
-  const maxWidth = 1780;
-  const maxHeight = 860;
-  const gap = count > 35 ? 10 : 14;
-  let best = null;
-
-  for (let columns = 1; columns <= Math.min(12, count); columns += 1) {
-    const rows = Math.ceil(count / columns);
-    const widthLimited = (maxWidth - gap * (columns - 1)) / columns;
-    const heightLimited = ((maxHeight - gap * (rows - 1)) / rows) * 0.75;
-    const cardWidth = Math.floor(Math.min(widthLimited, heightLimited, 220));
-
-    if (cardWidth < 72) continue;
-
-    const score = cardWidth - Math.abs(columns - rows * 1.6) * 0.5;
-
-    if (!best || score > best.score) {
-      best = {
-        score,
-        columns,
-        cardWidth,
-        gap
-      };
-    }
-  }
-
-  return best || {
-    columns: Math.min(12, count),
-    cardWidth: 72,
-    gap
-  };
-}
-
-function exportRankHtml(rank) {
-  return `
-    <div class="export-card-rank">
-      <span class="export-card-rank-number">${rank}</span>
-    </div>
-  `;
-}
-
-function exportCardHtml(item, rank, state) {
-  const title = escapeHtml(item.title);
-  const variant = escapeHtml(item.variantLabel);
-  const cover = escapeHtml(item.cover);
-  const logo = escapeHtml(item.logo);
-
-  if (state.spoilerOn) {
-    return `
-      <article class="export-card spoiler">
-        ${exportRankHtml(rank)}
-
-        <div class="export-card-spoiler">
-          <img
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-            src="${logo}"
-            alt="${title}"
-          />
-        </div>
-      </article>
-    `;
-  }
-
-  return `
-    <article class="export-card">
-      ${exportRankHtml(rank)}
-
-      <div class="cover">
-        <img
-          class="cover-img"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-          src="${cover}"
-          alt="${title}"
-        />
-        <div class="no-cover">${escapeHtml(t("noCover"))}</div>
-      </div>
-
-      ${
-        state.hideTitles
-          ? ""
-          : `
-            <div class="export-card-title">
-              ${title}
-              ${variant ? `<span class="export-card-variant">${variant}</span>` : ""}
-            </div>
-          `
-      }
-    </article>
-  `;
-}
-
-export function renderExportScene() {
-  const state = getState();
-  const theme = getActiveTheme(state);
-  const rankedItems = getRankedItemsForCurrentScope();
-  const layout = calculateExportLayout(rankedItems.length);
-  const total = getActiveItems(state).length;
-
-  exportStage.style.setProperty(
-    "--export-accent",
-    theme.accent || "#ffd369"
-  );
-
-  exportStage.innerHTML = `
-    <div class="export-background">
-      <img
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-        src="${escapeHtml(theme.background)}"
-        alt=""
-      />
-    </div>
-
-    <div class="export-overlay"></div>
-
-    <div class="export-content">
-      <header class="export-header">
-        <div>
-          <div class="export-brand">JRPGTop</div>
-          <div class="export-title">${escapeHtml(getCurrentScopeTitle())}</div>
-        </div>
-
-        <div class="export-count">
-          ${escapeHtml(t("rankedCount", {
-            ranked: rankedItems.length,
-            total
-          }))}
-        </div>
-      </header>
-
-      <div
-        class="export-grid"
-        style="
-          --export-columns:${layout.columns};
-          --export-card-width:${layout.cardWidth}px;
-          --export-gap:${layout.gap}px;
-        "
-      >
-        ${rankedItems
-          .map((item, index) => exportCardHtml(item, index + 1, state))
-          .join("")}
-      </div>
-    </div>
-  `;
-
-  bindImageFallbacks(exportStage);
 }
