@@ -3,6 +3,12 @@ const DATA_URL = new URL("../data/games.json", import.meta.url);
 export const SCOPE_ALL_LICENSES = "all-licenses";
 export const SCOPE_ALL_GAMES = "all-games";
 
+const GLOBAL_THEME_SEPARATOR = "::";
+
+export function makeGlobalThemeKey(licenseId, themeId) {
+  return `${licenseId}${GLOBAL_THEME_SEPARATOR}${themeId}`;
+}
+
 let catalog = null;
 let allItems = [];
 let licenseItems = [];
@@ -143,6 +149,21 @@ export function getItemsForLicense(licenseId) {
   return allItems.filter(item => item.licenseId === licenseId);
 }
 
+export function getAllThemes() {
+  return getCatalog().licenses.flatMap(license =>
+    (license.themes || []).map(theme => ({
+      ...theme,
+      licenseId: license.id,
+      licenseName: license.name,
+      globalKey: makeGlobalThemeKey(license.id, theme.id)
+    }))
+  );
+}
+
+function getGlobalTheme(selection) {
+  return getAllThemes().find(theme => theme.globalKey === selection) || null;
+}
+
 export function isGlobalRankingScope(scopeId) {
   return (
     scopeId === SCOPE_ALL_LICENSES ||
@@ -181,6 +202,37 @@ export function getActiveTheme(state) {
   const data = getCatalog();
 
   if (isGlobalRankingScope(state.rankingScope)) {
+    const selectedTheme =
+      getGlobalTheme(
+        state.selectedThemeByLicense[state.rankingScope]
+      ) ||
+      getAllThemes()[0] ||
+      null;
+
+    if (selectedTheme) {
+      const license = getLicenseById(selectedTheme.licenseId);
+
+      return {
+        id: selectedTheme.globalKey,
+        name: `${selectedTheme.licenseName} — ${selectedTheme.name}`,
+        background:
+          selectedTheme.background ||
+          license?.background ||
+          data.app?.defaultBackground ||
+          "",
+        accent:
+          selectedTheme.accent ||
+          license?.accent ||
+          data.app?.defaultAccent ||
+          "#ffd369",
+        accentStrong:
+          selectedTheme.accentStrong ||
+          license?.accentStrong ||
+          data.app?.defaultAccentStrong ||
+          "#ffb347"
+      };
+    }
+
     return {
       id: "global",
       name: "JRPGTop",

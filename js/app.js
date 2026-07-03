@@ -1,11 +1,13 @@
 import {
   getActiveLicense,
   getAllItems,
+  getAllThemes,
   getCatalog,
   getItemsForLicense,
   getLicenseById,
   getLicenseRankingItems,
   isGlobalRankingScope,
+  makeGlobalThemeKey,
   loadCatalog,
   SCOPE_ALL_GAMES,
   SCOPE_ALL_LICENSES
@@ -133,6 +135,20 @@ function initializeDefaults() {
         }
       }
 
+      const firstGlobalTheme = getAllThemes()[0];
+
+      if (firstGlobalTheme) {
+        if (!draft.selectedThemeByLicense[SCOPE_ALL_LICENSES]) {
+          draft.selectedThemeByLicense[SCOPE_ALL_LICENSES] =
+            firstGlobalTheme.globalKey;
+        }
+
+        if (!draft.selectedThemeByLicense[SCOPE_ALL_GAMES]) {
+          draft.selectedThemeByLicense[SCOPE_ALL_GAMES] =
+            firstGlobalTheme.globalKey;
+        }
+      }
+
       if (!draft.initialized) {
         for (const license of catalog.licenses) {
           const defaultOrder = getItemsForLicense(license.id)
@@ -158,13 +174,40 @@ function populateThemeSelect() {
   const state = getState();
   const globalScope = isGlobalRankingScope(state.rankingScope);
 
-  themeRow?.classList.toggle("disabled-row", globalScope);
-
   if (globalScope) {
-    themeSelect.innerHTML = `<option value="">${t("notAvailable")}</option>`;
-    themeSelect.disabled = true;
+    const catalog = getCatalog();
+    const availableThemes = getAllThemes();
+
+    themeSelect.innerHTML = catalog.licenses
+      .map(license => {
+        const options = (license.themes || [])
+          .map(
+            theme => `
+              <option value="${makeGlobalThemeKey(license.id, theme.id)}">
+                ${theme.name}
+              </option>
+            `
+          )
+          .join("");
+
+        return options
+          ? `<optgroup label="${license.name}">${options}</optgroup>`
+          : "";
+      })
+      .join("");
+
+    const selectedTheme =
+      state.selectedThemeByLicense[state.rankingScope] ||
+      availableThemes[0]?.globalKey ||
+      "";
+
+    themeSelect.value = selectedTheme;
+    themeSelect.disabled = availableThemes.length <= 1;
+    themeRow?.classList.toggle("disabled-row", availableThemes.length === 0);
     return;
   }
+
+  themeRow?.classList.remove("disabled-row");
 
   const license =
     getLicenseById(state.rankingScope) ||
@@ -300,6 +343,10 @@ function bindSideControls() {
     const state = getState();
 
     if (isGlobalRankingScope(state.rankingScope)) {
+      updateState(draft => {
+        draft.selectedThemeByLicense[state.rankingScope] =
+          themeSelect.value;
+      });
       return;
     }
 

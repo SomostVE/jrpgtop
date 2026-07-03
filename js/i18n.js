@@ -35,7 +35,7 @@ const translations = {
       "Le menu de droite permet de classer toutes les licences, tous les jeux ou seulement les jeux d'une licence.",
     guideStep2Title: "Choisis le thème",
     guideStep2Text:
-      "Pour une licence précise, le menu de gauche propose uniquement ses thèmes disponibles.",
+      "Pour une licence précise, le menu de gauche affiche ses thèmes. Pour Toutes les licences et Tous les jeux, il affiche tous les thèmes du catalogue.",
     guideStep3Title: "Classe ton top",
     guideStep3Text:
       "Fais glisser les cartes ou saisis directement leur numéro.",
@@ -93,7 +93,7 @@ const translations = {
       "The right menu lets you rank all licences, all games, or only the games from one licence.",
     guideStep2Title: "Choose the theme",
     guideStep2Text:
-      "For one specific licence, the left menu only shows its available themes.",
+      "For one specific licence, the left menu shows its themes. For All licences and All games, it shows every theme in the catalog.",
     guideStep3Title: "Rank your top",
     guideStep3Text:
       "Drag cards or directly enter their rank number.",
