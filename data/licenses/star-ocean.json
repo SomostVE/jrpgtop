@@ -1,64 +1,63 @@
 {
   "id": "star-ocean",
   "name": "Star Ocean",
-  "accent": "#ff8fc6",
-  "accentStrong": "#c74997",
-  "menuImage": "https://placehold.co/640x360/4b1740/ffffff?text=Star+Ocean",
-  "defaultTheme": "space",
+  "accent": "#8fd8ff",
+  "accentStrong": "#407cc9",
+  "menuImage": "https://gh.cdn.sewest.net/assets/ident/news/f52fd13a/AsterSystem02-5d59hs6sv.jpg",
+  "defaultTheme": "aster-system",
   "themes": [
     {
-      "id": "space",
-      "name": "Space",
-      "background": "https://placehold.co/1920x1080/100d27/ffd8f3?text=Star+Ocean",
-      "accent": "#ff8fc6",
-      "accentStrong": "#c74997"
+      "id": "aster-system",
+      "name": "Aster System",
+      "background": "https://gh.cdn.sewest.net/assets/ident/news/f52fd13a/AsterSystem02-5d59hs6sv.jpg",
+      "accent": "#8fd8ff",
+      "accentStrong": "#407cc9"
     }
   ],
   "games": [
     {
       "id": "first-departure",
       "title": "Star Ocean: First Departure",
-      "theme": "space",
+      "theme": "aster-system",
       "variants": [
         {
           "id": "og",
           "label": "OG",
           "type": "original",
-          "title": "Star Ocean",
-          "logo": "https://cdn2.steamgriddb.com/logo_thumb/582697fdad8f1dcf39baf8bb4d5d689d.png",
-          "cover": "https://howlongtobeat.com/games/9044_Star_Ocean_First_Departure.png"
+          "title": "Star Ocean: First Departure",
+          "logo": "assets/starocean/firstdeparture-logo.png",
+          "cover": "assets/starocean/firstdeparture.png"
         },
         {
           "id": "remake",
           "label": "Remake",
           "type": "remake",
           "title": "Star Ocean: First Departure R",
-          "logo": "https://cdn2.steamgriddb.com/logo_thumb/05389960731d6d110c65258c50688ca8.png",
-          "cover": "https://gh.cdn.sewest.net/assets/ident//games/star-ocean-first-departure-r/en_GB/GamePage_Header_Portrait_fhosdhes.jpg"
+          "logo": "assets/starocean/firstdeparturer-logo.png",
+          "cover": "assets/starocean/firstdeparturer.png"
         }
       ]
     },
     {
       "id": "second-story",
       "title": "Star Ocean: The Second Story",
-      "theme": "space",
-      "logo": "",
+      "theme": "aster-system",
       "variants": [
         {
           "id": "og",
           "label": "OG",
           "type": "original",
           "title": "Star Ocean: The Second Story",
-          "logo": "https://cdn2.steamgriddb.com/logo_thumb/290b8a77c05610ef0bb441f693cae25e.png",
-          "cover": "https://cdn2.steamgriddb.com/thumb/57ea7eccd1b2eef2c15c0a9ce6337aad.jpg"
+          "logo": "assets/starocean/secondstory-logo.png",
+          "cover": "assets/starocean/secondstory.png"
         },
         {
           "id": "remake",
           "label": "Remake",
           "type": "remake",
           "title": "Star Ocean: The Second Story R",
-          "logo": "https://cdn2.steamgriddb.com/logo_thumb/54831223ee7863174e0063b2c8538a4f.png",
-          "cover": "https://gh.cdn.sewest.net/assets/ident//games/bf691a4d/Star_Ocean_The_Second_Story_R_GamePage_Header_Portrait_1200x1600_v01-sdewgq7yd.jpg"
+          "logo": "assets/starocean/secondstoryr-logo.png",
+          "cover": "assets/starocean/secondstoryr.png"
         }
       ]
     }
