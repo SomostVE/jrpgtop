@@ -24,12 +24,15 @@
 
   <section id="config-screen" class="config-screen" data-ignore-export="true">
     <h1 class="config-title">JRPGTop</h1>
+
     <p class="config-subtitle" data-i18n="configSubtitle">
       Configure l'affichage avant de commencer.
     </p>
 
     <div class="config-block">
-      <div class="config-section-title" data-i18n="langTitle">Langue</div>
+      <div class="config-section-title" data-i18n="langTitle">
+        Langue
+      </div>
 
       <div class="config-lang-group">
         <label>
@@ -45,10 +48,13 @@
     </div>
 
     <div class="config-block">
-      <div class="config-section-title" data-i18n="displayTitle">Affichage</div>
+      <div class="config-section-title" data-i18n="displayTitle">
+        Affichage
+      </div>
 
       <label class="config-toggle">
         <span data-i18n="spoilerDesc">Masquer les jaquettes</span>
+
         <span class="switch">
           <input type="checkbox" id="config-spoiler" />
           <span class="slider"></span>
@@ -57,6 +63,7 @@
 
       <label id="config-hide-titles-row" class="config-toggle">
         <span data-i18n="hideTitles">Masquer les titres</span>
+
         <span class="switch">
           <input type="checkbox" id="config-hide-titles" />
           <span class="slider"></span>
@@ -65,7 +72,12 @@
     </div>
 
     <div class="config-actions">
-      <button id="config-start" class="primary-button" type="button" data-i18n="start">
+      <button
+        id="config-start"
+        class="primary-button"
+        type="button"
+        data-i18n="start"
+      >
         Commencer
       </button>
     </div>
@@ -73,7 +85,12 @@
 
   <main id="app" class="app" aria-hidden="true">
     <div class="app-bg">
-      <img id="background-image" crossorigin="anonymous" referrerpolicy="no-referrer" alt="" />
+      <img
+        id="background-image"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+        alt=""
+      />
     </div>
 
     <div class="app-overlay"></div>
@@ -96,7 +113,11 @@
 
           <div id="divider" class="subtle-divider"></div>
 
-          <div id="unranked-label" class="unranked-label" data-i18n="unranked">
+          <div
+            id="unranked-label"
+            class="unranked-label"
+            data-i18n="unranked"
+          >
             NON CLASSÉ(S)
           </div>
 
@@ -108,18 +129,37 @@
     </div>
   </main>
 
-  <aside id="left-menu" class="side-menu side-menu-left" data-ignore-export="true">
-    <button id="left-handle" class="side-handle" type="button" aria-label="Options">☰</button>
+  <aside
+    id="left-menu"
+    class="side-menu side-menu-left"
+    data-ignore-export="true"
+  >
+    <button
+      id="left-handle"
+      class="side-handle"
+      type="button"
+      aria-label="Options"
+    >
+      ☰
+    </button>
 
     <div class="side-panel options-panel">
-      <div class="side-caption" data-i18n="options">OPTIONS</div>
+      <div class="side-caption" data-i18n="options">
+        OPTIONS
+      </div>
 
-        <button id="btn-guide" class="panel-button" type="button" data-i18n="guide">
-          Guide
-        </button>
+      <button
+        id="btn-guide"
+        class="panel-button"
+        type="button"
+        data-i18n="guide"
+      >
+        Guide
+      </button>
 
       <label class="panel-row">
         <span data-i18n="language">Langue</span>
+
         <select id="side-language" class="select">
           <option value="fr">FR</option>
           <option value="en">EN</option>
@@ -133,6 +173,7 @@
 
       <label class="panel-row">
         <span data-i18n="antiSpoiler">Anti-spoiler</span>
+
         <span class="switch switch-small">
           <input type="checkbox" id="side-spoiler" />
           <span class="slider"></span>
@@ -141,6 +182,7 @@
 
       <label id="side-hide-titles-row" class="panel-row">
         <span data-i18n="hideTitles">Masquer les titres</span>
+
         <span class="switch switch-small">
           <input type="checkbox" id="side-hide-titles" />
           <span class="slider"></span>
@@ -148,86 +190,223 @@
       </label>
 
       <div class="panel-buttons">
-        <button id="btn-finalize" class="panel-button primary" type="button"></button>
-        <button id="btn-preview" class="panel-button" type="button" data-i18n="finalPreview">
+        <button
+          id="btn-finalize"
+          class="panel-button primary"
+          type="button"
+        ></button>
+
+        <button
+          id="btn-preview"
+          class="panel-button"
+          type="button"
+          data-i18n="finalPreview"
+        >
           Aperçu final
         </button>
-        <button id="btn-export" class="panel-button primary" type="button" data-i18n="exportImage">
+
+        <button
+          id="btn-export"
+          class="panel-button primary"
+          type="button"
+          data-i18n="exportImage"
+        >
           Exporter en PNG
         </button>
       </div>
     </div>
   </aside>
 
-  <aside id="right-menu" class="licence-drawer-wrap" data-ignore-export="true">
-    <button id="right-handle" class="side-handle licence-handle" type="button" aria-label="Classements">☰</button>
+  <aside
+    id="right-menu"
+    class="licence-drawer-wrap"
+    data-ignore-export="true"
+  >
+    <button
+      id="right-handle"
+      class="side-handle licence-handle"
+      type="button"
+      aria-label="Classements"
+    >
+      ☰
+    </button>
 
-    <div id="licence-drawer-backdrop" class="licence-drawer-backdrop"></div>
+    <div
+      id="licence-drawer-backdrop"
+      class="licence-drawer-backdrop"
+    ></div>
 
-    <section id="licence-drawer" class="licence-drawer" aria-hidden="true">
+    <section
+      id="licence-drawer"
+      class="licence-drawer"
+      aria-hidden="true"
+    >
       <header class="licence-drawer-header">
         <div>
-          <div class="side-caption" data-i18n="licenses">CLASSEMENTS</div>
-          <h2 data-i18n="chooseRanking">Choisir un classement</h2>
+          <div class="side-caption" data-i18n="licenses">
+            CLASSEMENTS
+          </div>
+
+          <h2 data-i18n="chooseRanking">
+            Choisir un classement
+          </h2>
         </div>
 
-        <button id="right-close" class="drawer-close" type="button" aria-label="Fermer">×</button>
+        <button
+          id="right-close"
+          class="drawer-close"
+          type="button"
+          aria-label="Fermer"
+        >
+          ×
+        </button>
       </header>
 
       <div id="licence-list" class="licence-list"></div>
     </section>
   </aside>
 
-  <div id="guide-modal" class="modal" hidden data-ignore-export="true">
-    <div class="modal-backdrop" data-close-modal="guide"></div>
+  <div
+    id="guide-modal"
+    class="modal"
+    hidden
+    data-ignore-export="true"
+  >
+    <div
+      class="modal-backdrop"
+      data-close-modal="guide"
+    ></div>
 
-    <section class="modal-card guide-card" role="dialog" aria-modal="true" aria-labelledby="guide-title">
-      <button class="modal-close" type="button" data-close-modal="guide" aria-label="Fermer">×</button>
+    <section
+      class="modal-card guide-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="guide-title"
+    >
+      <button
+        class="modal-close"
+        type="button"
+        data-close-modal="guide"
+        aria-label="Fermer"
+      >
+        ×
+      </button>
 
-      <h2 id="guide-title" data-i18n="guideTitle">Comment utiliser JRPGTop</h2>
+      <h2 id="guide-title" data-i18n="guideTitle">
+        Comment utiliser JRPGTop
+      </h2>
 
       <ul class="guide-steps">
         <li>
-          <strong data-i18n="guideStep1Title">Choisis le classement</strong>
+          <strong data-i18n="guideStep1Title">
+            Choisis le classement
+          </strong>
 
           <p class="guide-description">
-            <span data-i18n="guideStep1Start">Dans le menu de droite, choisis</span>
-            <span class="guide-keyword" data-i18n="allLicenses">Toutes les licences</span>
+            <span data-i18n="guideStep1Start">
+              Dans le menu de droite, choisis
+            </span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="allLicenses"
+            >
+              Toutes les licences
+            </span>
+
             <span data-i18n="guideStep1Or">ou</span>
-            <span class="guide-keyword" data-i18n="allGames">Tous les jeux</span>
-            <span data-i18n="guideStep1End">ou sélectionne directement une licence.</span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="allGames"
+            >
+              Tous les jeux
+            </span>
+
+            <span data-i18n="guideStep1End">
+              ou sélectionne directement une licence.
+            </span>
           </p>
         </li>
 
         <li>
-          <strong data-i18n="guideStep2Title">Choisis le thème</strong>
+          <strong data-i18n="guideStep2Title">
+            Choisis le thème
+          </strong>
 
           <p class="guide-description">
-            <span data-i18n="guideStep2Start">Dans le menu de gauche, utilise</span>
-            <span class="guide-keyword" data-i18n="theme">Thème</span>
-            <span data-i18n="guideStep2End">pour choisir le fond et les couleurs du classement.</span>
+            <span data-i18n="guideStep2Start">
+              Dans le menu de gauche, utilise
+            </span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="theme"
+            >
+              Thème
+            </span>
+
+            <span data-i18n="guideStep2End">
+              pour choisir le fond et les couleurs du classement.
+            </span>
           </p>
         </li>
 
         <li>
-          <strong data-i18n="guideStep3Title">Classe ton top</strong>
+          <strong data-i18n="guideStep3Title">
+            Classe ton top
+          </strong>
 
-          <p class="guide-description" data-i18n="guideStep3Text">
+          <p
+            class="guide-description"
+            data-i18n="guideStep3Text"
+          >
             Fais glisser les cartes ou saisis directement leur numéro de classement.
           </p>
         </li>
 
         <li>
-          <strong data-i18n="guideStep4Title">Finalise et exporte</strong>
+          <strong data-i18n="guideStep4Title">
+            Finalise et exporte
+          </strong>
 
           <p class="guide-description">
-            <span data-i18n="guideStep4Start">Utilise</span>
-            <span class="guide-keyword" data-i18n="finalizeTop">Finaliser le top</span>
-            <span data-i18n="guideStep4AfterFinalize">pour masquer les éléments non classés. Ouvre</span>
-            <span class="guide-keyword" data-i18n="finalPreview">Aperçu final</span>
-            <span data-i18n="guideStep4BeforeExport">puis choisis</span>
-            <span class="guide-keyword" data-i18n="exportImage">Exporter en PNG</span>
-            <span data-i18n="guideStep4End">pour enregistrer l’image.</span>
+            <span data-i18n="guideStep4Start">
+              Utilise
+            </span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="finalizeTop"
+            >
+              Finaliser le top
+            </span>
+
+            <span data-i18n="guideStep4AfterFinalize">
+              pour masquer les éléments non classés. Ouvre
+            </span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="finalPreview"
+            >
+              Aperçu final
+            </span>
+
+            <span data-i18n="guideStep4BeforeExport">
+              puis choisis
+            </span>
+
+            <span
+              class="guide-keyword"
+              data-i18n="exportImage"
+            >
+              Exporter en PNG
+            </span>
+
+            <span data-i18n="guideStep4End">
+              pour enregistrer l’image.
+            </span>
           </p>
         </li>
       </ul>
@@ -245,16 +424,44 @@
     </section>
   </div>
 
-  <div id="preview-modal" class="modal" hidden data-ignore-export="true">
-    <div class="modal-backdrop" data-close-modal="preview"></div>
+  <div
+    id="preview-modal"
+    class="modal"
+    hidden
+    data-ignore-export="true"
+  >
+    <div
+      class="modal-backdrop"
+      data-close-modal="preview"
+    ></div>
 
-    <section class="modal-card preview-card" role="dialog" aria-modal="true" aria-labelledby="preview-title">
-      <button class="modal-close" type="button" data-close-modal="preview" aria-label="Fermer">×</button>
+    <section
+      class="modal-card preview-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="preview-title"
+    >
+      <button
+        class="modal-close"
+        type="button"
+        data-close-modal="preview"
+        aria-label="Fermer"
+      >
+        ×
+      </button>
 
-      <h2 id="preview-title" data-i18n="finalPreview">Aperçu final</h2>
+      <h2 id="preview-title" data-i18n="finalPreview">
+        Aperçu final
+      </h2>
 
-      <div id="preview-viewport" class="preview-viewport">
-        <div id="preview-mount" class="preview-mount"></div>
+      <div
+        id="preview-viewport"
+        class="preview-viewport"
+      >
+        <div
+          id="preview-mount"
+          class="preview-mount"
+        ></div>
       </div>
     </section>
   </div>
