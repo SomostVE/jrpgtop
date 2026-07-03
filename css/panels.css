@@ -328,7 +328,7 @@ body.app-started .licence-drawer-wrap {
   gap: 10px;
   padding: 0 24px 0 40px;
   overscroll-behavior: contain;
-  scroll-snap-type: y proximity;
+
   scrollbar-gutter: stable;
   scrollbar-color:
     color-mix(
@@ -385,7 +385,7 @@ body.app-started .licence-drawer-wrap {
     filter 150ms ease,
     border-color 150ms ease;
   text-align: left;
-  scroll-snap-align: center;
+
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.34);
 }
@@ -461,7 +461,7 @@ body.app-started .licence-drawer-wrap {
   padding: 28px 18px;
   color: var(--muted);
   text-align: center;
-  scroll-snap-align: center;
+
 }
 
 .licence-empty strong {
