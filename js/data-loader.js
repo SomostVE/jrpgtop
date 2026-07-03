@@ -15,6 +15,81 @@ let licenseItems = [];
 let itemByKey = new Map();
 let licenseById = new Map();
 
+async function fetchJson(url, label) {
+  const response = await fetch(url, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Impossible de charger ${label} (${response.status}).`);
+  }
+
+  try {
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      `Le fichier ${label} ne contient pas un JSON valide : ${error.message}`
+    );
+  }
+}
+
+function normalizeLicenseFile(data, label) {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.licenses)) return data.licenses;
+  if (data && typeof data === "object" && data.id) return [data];
+
+  throw new Error(`Le fichier ${label} ne contient pas de licence valide.`);
+}
+
+async function resolveCatalog(manifest) {
+  // Compatibilité avec l'ancien fichier monolithique.
+  if (Array.isArray(manifest?.licenses)) return manifest;
+
+  if (!Array.isArray(manifest?.licenseFiles)) {
+    throw new Error("data/games.json doit contenir licenses ou licenseFiles.");
+  }
+
+  const groups = await Promise.all(
+    manifest.licenseFiles.map(async entry => {
+      const relativePath = typeof entry === "string" ? entry : entry?.file;
+
+      if (!relativePath) {
+        throw new Error(
+          "Une entrée de licenseFiles ne contient pas de chemin valide."
+        );
+      }
+
+      const data = await fetchJson(
+        new URL(relativePath, DATA_URL),
+        `data/${relativePath}`
+      );
+
+      return normalizeLicenseFile(data, `data/${relativePath}`);
+    })
+  );
+
+  const licenses = groups.flat();
+  const seenIds = new Set();
+
+  for (const license of licenses) {
+    if (!license?.id || !license?.name) {
+      throw new Error("Chaque licence doit contenir au minimum id et name.");
+    }
+
+    if (seenIds.has(license.id)) {
+      throw new Error(
+        `L'identifiant de licence "${license.id}" est présent plusieurs fois.`
+      );
+    }
+
+    seenIds.add(license.id);
+  }
+
+  return {
+    version: manifest.version ?? 2,
+    app: manifest.app ?? {},
+    licenses
+  };
+}
+
 function buildIndexes(data) {
   allItems = [];
   licenseItems = [];
@@ -56,16 +131,14 @@ function buildIndexes(data) {
       const variants =
         Array.isArray(game.variants) && game.variants.length > 0
           ? game.variants
-          : [
-              {
-                id: "default",
-                label: "",
-                title: game.title,
-                cover: game.cover,
-                logo: game.logo,
-                defaultRank: game.defaultRank
-              }
-            ];
+          : [{
+              id: "default",
+              label: "",
+              title: game.title,
+              cover: game.cover,
+              logo: game.logo,
+              defaultRank: game.defaultRank
+            }];
 
       for (const variant of variants) {
         const key = `${license.id}:${game.id}:${variant.id}`;
@@ -80,7 +153,11 @@ function buildIndexes(data) {
           variantId: variant.id,
           variantLabel: variant.label || "",
           type: variant.type || "default",
-          themeId: variant.theme || game.theme || license.defaultTheme || "",
+          themeId:
+            variant.theme ||
+            game.theme ||
+            license.defaultTheme ||
+            "",
           cover: variant.cover || game.cover || "",
           logo: variant.logo || game.logo || license.logo || "",
           defaultRank:
@@ -99,33 +176,20 @@ function buildIndexes(data) {
 }
 
 export async function loadCatalog() {
-  const response = await fetch(DATA_URL, {
-    cache: "no-store"
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Impossible de charger data/games.json (${response.status}).`
-    );
-  }
-
-  const data = await response.json();
+  const manifest = await fetchJson(DATA_URL, "data/games.json");
+  const data = await resolveCatalog(manifest);
 
   if (!data || !Array.isArray(data.licenses)) {
-    throw new Error("Le fichier data/games.json n'a pas le format attendu.");
+    throw new Error("Le catalogue chargé n'a pas le format attendu.");
   }
 
   catalog = data;
   buildIndexes(data);
-
   return data;
 }
 
 export function getCatalog() {
-  if (!catalog) {
-    throw new Error("Le catalogue n'est pas encore chargé.");
-  }
-
+  if (!catalog) throw new Error("Le catalogue n'est pas encore chargé.");
   return catalog;
 }
 
@@ -165,10 +229,7 @@ function getGlobalTheme(selection) {
 }
 
 export function isGlobalRankingScope(scopeId) {
-  return (
-    scopeId === SCOPE_ALL_LICENSES ||
-    scopeId === SCOPE_ALL_GAMES
-  );
+  return scopeId === SCOPE_ALL_LICENSES || scopeId === SCOPE_ALL_GAMES;
 }
 
 export function getActiveLicense(state) {
@@ -189,7 +250,6 @@ export function getScopeItems(state) {
   }
 
   const license = getLicenseById(state.rankingScope);
-
   return license ? getItemsForLicense(license.id) : [];
 }
 
@@ -203,9 +263,7 @@ export function getActiveTheme(state) {
 
   if (isGlobalRankingScope(state.rankingScope)) {
     const selectedTheme =
-      getGlobalTheme(
-        state.selectedThemeByLicense[state.rankingScope]
-      ) ||
+      getGlobalTheme(state.selectedThemeByLicense[state.rankingScope]) ||
       getAllThemes()[0] ||
       null;
 
