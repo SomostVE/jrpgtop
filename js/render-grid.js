@@ -272,7 +272,9 @@ function exportCardHtml(item, rank, state) {
   if (state.spoilerOn) {
     return `
       <article class="export-card spoiler">
-        <div class="export-card-rank">#${rank}</div>
+        <div class="export-card-rank">
+        <span>#${rank}</span>
+        </div>
         <div class="export-card-spoiler">
           <img
             crossorigin="anonymous"
